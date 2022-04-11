@@ -55,7 +55,7 @@
     "siteUrl": "https://www.joensuuhema.fi",
     "robotsText": "User-agent: *\nDisallow: /cgi-bin\n",
     "publishChangesOnly": true,
-    "mbrsiteDomain": "faq91f65wd",
+    "mbrsiteDomain": "6zupyt2gyi",
     "cookiesAlert": false,
     "gdpr": false
   },
