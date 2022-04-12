@@ -54,8 +54,8 @@
     "sitemapSwitcherAuto": "on",
     "siteUrl": "https://www.joensuuhema.fi",
     "robotsText": "User-agent: *\nDisallow: /cgi-bin\n",
-    "publishChangesOnly": true,
-    "mbrsiteDomain": "hll7saarxj",
+    "publishChangesOnly": false,
+    "mbrsiteDomain": "jprnclqlvg",
     "cookiesAlert": false,
     "gdpr": false
   },
