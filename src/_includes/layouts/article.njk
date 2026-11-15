@@ -6,7 +6,7 @@ layout: layouts/base.njk
   <div class="container article{% if image %} article--split{% endif %}">
     {%- if image %}
     <div class="article__image">
-      {% image image, imageAlt or "", "(min-width: 992px) 640px, 100vw", [640, 1000, 1400] %}
+      {% image image, imageAlt or "", "(min-width: 992px) 640px, 100vw", [640, 1000, 1400], "high" %}
     </div>
     {%- endif %}
     <div class="article__text">

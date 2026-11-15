@@ -35,10 +35,24 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("src/admin/**");
 
   // Responsive <picture> for content images.
-  eleventyConfig.addShortcode("image", async (src, alt = "", sizes = "100vw", widths = [480, 960, 1600]) => {
+  // priority: "high" = the page's main (LCP) image, "low" = hidden until interaction
+  // (e.g. later gallery slides), "eager" = visible on load, otherwise lazy-loaded.
+  eleventyConfig.addShortcode("image", async (src, alt = "", sizes = "100vw", widths = [480, 960, 1600], priority = "") => {
     if (!src) return "";
     const metadata = await Image(sourcePath(src), imageOptions(widths));
-    return Image.generateHTML(metadata, { alt, sizes, loading: "lazy", decoding: "async" });
+    const attrs = { alt, sizes, decoding: "async" };
+    if (priority === "high") attrs.fetchpriority = "high";
+    else if (priority === "low") Object.assign(attrs, { loading: "lazy", fetchpriority: "low" });
+    else if (priority !== "eager") attrs.loading = "lazy";
+    return Image.generateHTML(metadata, attrs);
+  });
+
+  // CSS background images are invisible to the browser's preload scanner, so the
+  // page's hero background is preloaded from <head> to keep LCP fast.
+  eleventyConfig.addShortcode("bgpreload", async (src) => {
+    if (!src) return "";
+    const metadata = await Image(sourcePath(src), imageOptions([1600]));
+    return `<link rel="preload" as="image" href="${metadata.webp[0].url}" type="image/webp" fetchpriority="high">`;
   });
 
   // Inline style for a full-width background image. The HTML base plugin does not

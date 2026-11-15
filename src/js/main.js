@@ -38,61 +38,87 @@
   });
 
   // ---------- Gallery carousel ----------
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Native scroll-snap does the scrolling (touch, trackpad, arrow keys on the focused
+  // track). This script only wires the buttons and dots and announces the current image.
   document.querySelectorAll(".carousel").forEach((carousel) => {
     const track = carousel.querySelector(".carousel__track");
     const slides = [...track.children];
-    const prev = carousel.querySelector(".carousel__btn--prev");
-    const next = carousel.querySelector(".carousel__btn--next");
+    const buttons = carousel.querySelectorAll(".carousel__btn");
+    const status = carousel.querySelector("[role=status]");
     if (slides.length < 2) {
-      prev.hidden = next.hidden = true;
+      buttons.forEach((b) => { b.hidden = true; });
       return;
     }
 
-    let index = 0;
-    const dots = slides.map((_, i) => {
+    // Nearest slide to the track's centre, measured from the real scroll position.
+    const nearest = () => {
+      const centre = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      slides.forEach((s, i) => {
+        const d = Math.abs(s.offsetLeft - track.offsetLeft + s.offsetWidth / 2 - centre);
+        const bd = Math.abs(slides[best].offsetLeft - track.offsetLeft + slides[best].offsetWidth / 2 - centre);
+        if (d < bd) best = i;
+      });
+      return best;
+    };
+
+    let current = 0;   // slide shown by the markers
+    let settled = 0;   // last slide announced after scrolling stopped
+    let pending = null; // slide a click is scrolling to
+
+    const dots = slides.map((slide, i) => {
       const dot = document.createElement("button");
       dot.type = "button";
-      dot.setAttribute("aria-label", `Näytä kuva ${i + 1}`);
-      dot.addEventListener("click", () => { go(i); restart(); });
+      dot.setAttribute("aria-label", slide.dataset.markerName || `${i + 1}`);
+      dot.addEventListener("click", () => goTo(i));
       carousel.querySelector(".carousel__dots").append(dot);
       return dot;
     });
-    const updateDots = () => dots.forEach((d, i) => d.setAttribute("aria-current", String(i === index)));
-    const go = (i) => {
-      index = (i + slides.length) % slides.length;
-      track.scrollTo({ left: index * track.clientWidth });
-      updateDots();
+    const mark = (i) => {
+      if (i === current && dots[i].getAttribute("aria-current") === "true") return;
+      current = i;
+      dots.forEach((d, j) => d.setAttribute("aria-current", String(j === i)));
     };
 
-    let scrollTimer;
+    function goTo(i) {
+      const target = (i + slides.length) % slides.length;
+      pending = target;
+      mark(target);
+      const s = slides[target];
+      track.scrollTo({ left: s.offsetLeft - track.offsetLeft - (track.clientWidth - s.offsetWidth) / 2 });
+    }
+
+    buttons.forEach((b) => {
+      b.addEventListener("click", () => {
+        const from = pending ?? nearest(); // rapid clicks build on the slide already targeted
+        goTo(from + (b.dataset.direction === "next" ? 1 : -1));
+      });
+    });
+
+    // Keep the dots in step while scrolling (one update per frame).
+    let frame = 0;
     track.addEventListener("scroll", () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        index = Math.round(track.scrollLeft / track.clientWidth);
-        updateDots();
-      }, 100);
-    });
-    prev.addEventListener("click", () => { go(index - 1); restart(); });
-    next.addEventListener("click", () => { go(index + 1); restart(); });
-    track.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); restart(); }
-      if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); restart(); }
-    });
+      if (pending !== null || frame) return;
+      frame = requestAnimationFrame(() => { frame = 0; mark(nearest()); });
+    }, { passive: true });
 
-    // Auto-advance every 5 s, paused while the pointer or focus is inside.
-    let timer;
-    let paused = false;
-    const restart = () => {
-      clearInterval(timer);
-      if (!reduceMotion) timer = setInterval(() => { if (!paused) go(index + 1); }, 5000);
+    // Once scrolling stops: sync state and announce the image for screen readers.
+    const onSettle = () => {
+      pending = null;
+      const i = nearest();
+      mark(i);
+      if (i !== settled) {
+        settled = i;
+        status.textContent = `Kuva ${i + 1} / ${slides.length}`;
+      }
     };
-    carousel.addEventListener("mouseenter", () => { paused = true; });
-    carousel.addEventListener("mouseleave", () => { paused = false; });
-    carousel.addEventListener("focusin", () => { paused = true; });
-    carousel.addEventListener("focusout", () => { paused = false; });
+    if ("onscrollend" in window) {
+      track.addEventListener("scrollend", onSettle);
+    } else {
+      let timer;
+      track.addEventListener("scroll", () => { clearTimeout(timer); timer = setTimeout(onSettle, 120); }, { passive: true });
+    }
 
-    updateDots();
-    restart();
+    mark(0);
   });
 })();

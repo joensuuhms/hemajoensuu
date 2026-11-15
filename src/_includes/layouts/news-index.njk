@@ -10,7 +10,7 @@ layout: layouts/base.njk
       <article class="card">
         {%- if post.data.cardImage %}
         <a class="card__img" href="{{ post.url }}" tabindex="-1" aria-hidden="true">
-          {% image post.data.cardImage, "", "(min-width: 768px) 50vw, 100vw", [480, 960] %}
+          {% image post.data.cardImage, "", "(min-width: 768px) 50vw, 100vw", [480, 960], ("eager" if loop.index <= 2 else "") %}
         </a>
         {%- endif %}
         <div class="card__body">

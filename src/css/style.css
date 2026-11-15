@@ -21,15 +21,18 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  /* main and footer share one grid cell, so the footer overlays the bottom of the page's background image */
+  display: grid;
+  grid-template: 1fr / 100%;
   font-family: var(--font);
+  /* Scale fallback fonts to Jost's x-height so text doesn't jump when Jost loads. */
+  font-size-adjust: from-font;
   font-size: 1.125rem;
   line-height: 1.6;
   background: var(--bg);
   color: var(--text);
 }
-main { flex: 1; display: flex; flex-direction: column; }
+main { grid-area: 1 / 1; display: flex; flex-direction: column; }
 main > * { flex: 1; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: var(--accent); }
@@ -79,6 +82,8 @@ a:hover { color: var(--accent-strong); }
   cursor: pointer;
 }
 .nav-list a:hover, .dropdown-toggle:hover, .nav-list [aria-current="page"] { color: var(--accent); }
+/* Current page is marked by more than colour alone (WCAG 1.4.1). */
+.nav-list [aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .35em; }
 .dropdown-toggle::after {
   content: "";
   display: inline-block;
@@ -140,7 +145,8 @@ a:hover { color: var(--accent-strong); }
 /* ---------- Page sections ---------- */
 .hero, .section {
   position: relative;
-  padding: calc(var(--nav-h) + 4rem) 0 4rem;
+  /* bottom padding leaves room for the overlaid footer (up to two lines on small phones) */
+  padding: calc(var(--nav-h) + 4rem) 0 6rem;
   background-color: var(--panel);
   background-position: center;
   background-size: cover;
@@ -215,16 +221,27 @@ a:hover { color: var(--accent-strong); }
 .back a { color: var(--muted); }
 
 /* ---------- Gallery carousel ---------- */
-.carousel { position: relative; margin-top: 1rem; }
+.carousel { --dots-h: 2.5rem; position: relative; margin-top: 1rem; }
 .carousel__track {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
   scrollbar-width: none;
   border-radius: 4px;
   background: #000;
+  touch-action: manipulation;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__track { scroll-behavior: smooth; }
+}
+/* Buttons sit over the track; the container lets clicks/swipes through to the track. */
+.carousel__controls {
+  position: absolute;
+  inset: 0 0 var(--dots-h) 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.carousel__controls .carousel__btn { pointer-events: auto; touch-action: manipulation; }
 .carousel__track::-webkit-scrollbar { display: none; }
 .carousel__slide {
   display: flex;
@@ -255,13 +272,32 @@ a:hover { color: var(--accent-strong); }
 .carousel__btn:hover { background: rgba(0, 0, 0, .8); }
 .carousel__btn--prev { left: 12px; }
 .carousel__btn--next { right: 12px; }
-.carousel__dots { display: flex; justify-content: center; gap: .6rem; margin-top: 1rem; }
-.carousel__dots button { width: 12px; height: 12px; padding: 0; border: 0; border-radius: 50%; background: #777; cursor: pointer; }
-.carousel__dots button[aria-current="true"] { background: var(--accent); }
+.carousel__dots { display: flex; justify-content: center; align-items: center; gap: .25rem; height: var(--dots-h); padding-top: 1rem; }
+/* 24px tap target around a 12px dot */
+.carousel__dots button {
+  width: 24px;
+  height: 24px;
+  padding: 6px;
+  border: 0;
+  border-radius: 50%;
+  background: #777 content-box;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.carousel__dots button[aria-current="true"] { background-color: var(--accent); }
 
 /* ---------- Footer ---------- */
-.site-footer { padding: 30px 16px; background: var(--bg); text-align: center; }
-.site-footer p { margin: 0; }
+/* Same see-through black as the header; sits over the last section's bottom padding. */
+.site-footer {
+  grid-area: 1 / 1;
+  align-self: end;
+  position: relative;
+  z-index: 1;
+  padding: .75rem 16px;
+  background: rgba(0, 0, 0, .5);
+  text-align: center;
+}
+.site-footer p { margin: 0; font-size: 1rem; line-height: 1.4; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
