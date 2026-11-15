@@ -26,6 +26,25 @@ Sisällönhallinnan omat painikkeet ovat englanniksi, mutta kaikki kentät on ni
 
 Sivusto päivittyy noin 1–2 minuutin kuluttua julkaisusta.
 
+### Luonnos ja ajastettu julkaisu
+
+- **Luonnos – ei näy sivustolla**: kun ruutu on valittuna, uutinen pysyy piilossa myös julkaisun jälkeen. Poista valinta, kun uutinen saa näkyä.
+- **Julkaise automaattisesti**: valitse päivä ja kellonaika, jolloin uutinen tulee näkyviin. Sivusto tarkistaa ajastetut uutiset kerran tunnissa, joten uutinen näkyy viimeistään tunnin kuluttua valitusta ajasta. Muista silti julkaista uutinen (Publish) etukäteen.
+
+## Uuden sivun luominen (Omat sivut)
+
+1. Valitse **Omat sivut** ja paina **New sivu**.
+2. Valitse **Sivun tyyli**: *Tavallinen* (tumma tausta) tai *Taustakuvalla*.
+3. Lisää **Osiot**-kohtaan haluamasi osat. Niitä voi järjestää vetämällä. Vaihtoehdot ovat:
+   - Teksti
+   - Kuva ja teksti
+   - Painikkeet
+   - Kuvagalleria
+   - Kysymykset ja vastaukset
+   - Tietolaatikko
+4. Tallenna ja julkaise kuten uutinen. Sivun osoite on otsikon mukainen, esimerkiksi otsikosta ”Kesäleiri 2027” tulee osoite `/kesaleiri-2027/`.
+5. Lisää sivu valikkoon kohdassa **Asetukset → Päävalikko**.
+
 ## Sivujen muokkaaminen
 
 Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata:
@@ -37,7 +56,12 @@ Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata:
 - **Galleria**: kuvia voi lisätä, poistaa ja järjestää uudelleen.
 - **Ajankohtaista**: uutisten listaussivun otsikko ja taustakuva.
 
-**Asetukset**-kohdasta voi muuttaa sivuston nimeä, somelinkkejä, alatunnistetta ja päävalikkoa.
+**Asetukset**-kohdasta voi muuttaa:
+
+- **Sivuston tiedot**: nimi, somelinkit, sähköposti ja alatunniste.
+- **Päävalikko**: valikon kohdat ja niiden järjestys.
+- **Värit**: otsikoiden, linkkien, painikkeiden ja taustojen värit. Jos valittu väri tekisi tekstistä vaikealukuisen, sivusto käyttää sen sijaan oletusväriä.
+- **Uudelleenohjaukset**: vanha osoite ohjataan uuteen, esimerkiksi kun sivu siirretään. Vanha osoite ei saa olla minkään olemassa olevan sivun osoite.
 
 ## Kuvat
 

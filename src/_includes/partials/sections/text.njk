@@ -1,0 +1,5 @@
+{#- Text block. Expects `s.heading` (optional) and `s.body` (Markdown). -#}
+{%- if s.heading or s.body %}
+{%- if s.heading %}<h2 class="section-heading">{{ s.heading }}</h2>{% endif %}
+{%- if s.body %}<div class="prose">{{ s.body | md | safe }}</div>{% endif %}
+{%- endif %}

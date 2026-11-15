@@ -18,6 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,700;1,400&display=swap">
   <link rel="stylesheet" href="/css/style.css">
+  <style>:root{ {{ themeVars.css | safe }} }</style>
   {%- if heroImage %}
   {% bgpreload heroImage %}
   {%- elif background and not image %}
@@ -28,6 +29,13 @@
 <body>
   <a class="skip-link" href="#sisalto">Siirry sisältöön</a>
   {% include "partials/header.njk" %}
+  {%- if draft or (publishAt | isFuture) %}
+  {#- Only ever rendered in local preview (npm start); the published build skips these pages. #}
+  <p class="preview-banner" role="status">
+    {%- if draft %}LUONNOS – tämä sivu ei näy julkisella sivustolla.
+    {%- else %}AJASTETTU – julkaistaan {{ publishAt | fiDateTime }}.{% endif %}
+  </p>
+  {%- endif %}
   <main id="sisalto">
     {{ content | safe }}
   </main>

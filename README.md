@@ -13,7 +13,10 @@ Club members' editing guide (in Finnish): [OHJEET.md](OHJEET.md).
 | `src/_data/site.json` | Site name, social links, email, footer, custom domain |
 | `src/_data/navigation.json` | Main menu |
 | `src/404.njk` | Finnish "page not found" page (GitHub Pages serves `/404.html` automatically) |
-| `src/_data/redirects.json` | Old URLs that redirect to new ones (`page6.html`, `page7.html`) |
+| `src/omat-sivut/*.md` | Pages created in the CMS with the section builder → `/<file-name>/` (layout `custom-page.njk`) |
+| `src/_data/redirects.json` | Old URLs that redirect to new ones (editable in CMS → Asetukset → Uudelleenohjaukset) |
+| `src/_data/theme.json`, `themeVars.js` | Site colours (CMS → Asetukset → Värit). `themeVars.js` checks WCAG contrast and falls back to the default colour, printing a `[theme]` warning in the build log, if a colour would be unreadable. |
+| `src/_includes/partials/sections/` | Section partials shared by the fixed pages and the section builder. Sections with images (`carousel`, `imageText`) are JS shortcodes in `eleventy.config.js`, because Nunjucks includes that use async shortcodes render nothing inside loops. |
 | `src/uploads/` | Images (the CMS uploads here). Resized/converted to WebP automatically at build time. |
 | `src/_includes/` | Layouts and partials (Nunjucks) |
 | `src/css/style.css`, `src/js/main.js` | All styling and the small script for menu + gallery |
@@ -29,9 +32,20 @@ npm start          # http://localhost:8080
 
 To try the CMS locally without GitHub login, run `npm run cms` in a second terminal and open http://localhost:8080/admin/. Changes are written straight to your local files.
 
+### Drafts and scheduled posts
+
+News posts and section-builder pages have two extra front-matter fields:
+
+- `draft: true`: the page is left out of the published build entirely (no page, not in the news list or sitemap).
+- `publishAt: 2027-03-01T18:00:00+02:00`: the page is left out until that time.
+
+This is the `unpublished` preprocessor in `eleventy.config.js`. In local preview (`npm start`) both are still shown, with a yellow "LUONNOS" / "AJASTETTU" banner.
+
 ## Deployment
 
-Every push to `master` runs `.github/workflows/deploy.yml`, which builds the site and deploys it to GitHub Pages.
+Every push to `master` runs `.github/workflows/deploy.yml`, which builds the site and deploys it to GitHub Pages. The workflow also runs **every hour** (`cron: "7 * * * *"`) so scheduled posts go live on time.
+
+**Note:** GitHub pauses scheduled workflows in repos with no activity for 60 days. If scheduled posts stop appearing, re-enable the workflow under **Actions → Julkaise sivusto**.
 
 One-time setup: **Repo → Settings → Pages → Build and deployment → Source: GitHub Actions.**
 

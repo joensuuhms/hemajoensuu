@@ -1,0 +1,27 @@
+---
+layout: layouts/base.njk
+---
+{#- Pages created in the CMS (Omat sivut). pageStyle "hero" = photo background,
+    otherwise a plain dark page. Sections are stacked in the order chosen in the CMS. -#}
+{%- set sectionTypes = ["text", "imageText", "buttons", "gallery", "faq", "infoBox"] %}
+{%- set isHero = pageStyle == "hero" %}
+<section class="{{ 'hero' if isHero else 'section' }}"{% if isHero and heroImage %} style="{% bgimage heroImage %}"{% endif %}>
+  {%- if isHero and overlay %}<div class="overlay" style="opacity: {{ overlay }}"></div>{% endif %}
+  <div class="container{% if isHero %} hero__inner{% endif %}">
+    <div class="custom-page">
+      <h1 class="page-title title--{{ titleColor or 'light' }}">{{ heroTitle or title }}</h1>
+      {%- if content | trim %}<div class="prose">{{ content | safe }}</div>{% endif %}
+      {#- asyncEach (not for): the included sections use the async {% image %} shortcode. #}
+      {%- asyncEach s in sections %}
+      {%- if s.type in sectionTypes %}
+      {%- set sectionId = "osio-" + loop.index %}
+      <div class="page-section page-section--{{ s.type }}">
+        {%- if s.type == "gallery" %}{% carousel s.images, s.heading, false %}
+        {%- elif s.type == "imageText" %}{% imageText s %}
+        {%- else %}{% include "partials/sections/" + s.type + ".njk" %}{% endif %}
+      </div>
+      {%- endif %}
+      {%- endeach %}
+    </div>
+  </div>
+</section>

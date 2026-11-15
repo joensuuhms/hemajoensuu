@@ -1,0 +1,9 @@
+{#- Highlighted box. Expects `s.title`, `s.text` (Markdown); the heading id comes from `s.id`
+    or, inside the section builder, from the per-section `sectionId`. -#}
+{%- set boxId = s.id or ((sectionId or "info-box") + "-title") %}
+{%- if s.text %}
+<aside class="info-box"{% if s.title %} aria-labelledby="{{ boxId }}"{% endif %}>
+  {%- if s.title %}<h2 class="info-box__title" id="{{ boxId }}">{{ s.title }}</h2>{% endif %}
+  <div class="prose">{{ s.text | md | safe }}</div>
+</aside>
+{%- endif %}

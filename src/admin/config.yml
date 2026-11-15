@@ -43,6 +43,8 @@ _fields:
   overlay: &overlay { label: "Taustakuvan tummennus (0 = ei, 0.9 = lähes musta)", name: overlay, widget: number, value_type: float, min: 0, max: 0.9, step: 0.1, required: false }
   wide: &wide { label: "Leveä tekstipalsta", name: wide, widget: boolean, required: false, default: false }
   body: &body { label: "Teksti", name: body, widget: markdown, required: false }
+  draft: &draft { label: "Luonnos – ei näy sivustolla", name: draft, widget: boolean, required: false, default: false, hint: "Kun tämä on valittuna, sisältö tallentuu mutta ei näy julkisella sivustolla." }
+  publishAt: &publishAt { label: "Julkaise automaattisesti (valinnainen)", name: publishAt, widget: datetime, required: false, format: "YYYY-MM-DDTHH:mm:ssZ", date_format: "D.M.YYYY", time_format: "HH:mm", hint: "Jos aika on tulevaisuudessa, sisältö tulee näkyviin vasta silloin (viimeistään tunnin kuluttua ajasta). Tyhjä = näkyy heti julkaisun jälkeen." }
   button: &button
     label: "Painike"
     name: button
@@ -84,6 +86,103 @@ collections:
       - { label: "Artikkelin kuvan kuvaus (näkövammaisille)", name: imageAlt, widget: string, required: false }
       - { label: "Artikkelin taustakuva", name: background, widget: image, required: false }
       - { label: "Teksti", name: body, widget: markdown }
+      - *draft
+      - *publishAt
+
+  - name: omat-sivut
+    label: "Omat sivut"
+    label_singular: "sivu"
+    description: "Uudet sivut, jotka kootaan osioista (teksti, kuva ja teksti, painikkeet, kuvagalleria, kysymykset, tietolaatikko). Sivun osoite on /tiedoston-nimi/. Lisää sivu valikkoon kohdassa Asetukset → Päävalikko."
+    folder: src/omat-sivut
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    editor: { preview: false }
+    fields:
+      - *title
+      - *description
+      - *draft
+      - *publishAt
+      - { label: "Sivun tyyli", name: pageStyle, widget: select, default: plain, options: [{ label: "Tavallinen (tumma tausta)", value: plain }, { label: "Taustakuvalla", value: hero }] }
+      - *heroTitle
+      - { label: "Taustakuva (vain tyylissä Taustakuvalla)", name: heroImage, widget: image, required: false, hint: "Käytä tummaa tai tummennettua kuvaa, jotta valkoinen teksti erottuu." }
+      - *overlay
+      - *titleColor
+      - { label: "Johdantoteksti (valinnainen)", name: body, widget: markdown, required: false }
+      - label: "Osiot"
+        name: sections
+        widget: list
+        required: false
+        label_singular: "osio"
+        hint: "Osiot näytetään tässä järjestyksessä. Järjestystä voi muuttaa vetämällä."
+        types:
+          - label: "Teksti"
+            name: text
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: "Väliotsikko (valinnainen)", name: heading, widget: string, required: false }
+              - { label: "Teksti", name: body, widget: markdown }
+          - label: "Kuva ja teksti"
+            name: imageText
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: "Kuva", name: image, widget: image }
+              - { label: "Kuvan kuvaus (näkövammaisille)", name: alt, widget: string }
+              - { label: "Kuvan puoli", name: imageSide, widget: select, default: left, options: [{ label: "Vasemmalla", value: left }, { label: "Oikealla", value: right }] }
+              - { label: "Väliotsikko (valinnainen)", name: heading, widget: string, required: false }
+              - { label: "Teksti", name: body, widget: markdown, required: false }
+          - label: "Painikkeet"
+            name: buttons
+            widget: object
+            fields:
+              - label: "Painikkeet"
+                name: buttons
+                widget: list
+                label_singular: "painike"
+                summary: "{{fields.text}}"
+                fields:
+                  - { label: "Painikkeen teksti", name: text, widget: string }
+                  - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string }
+                  - { label: "Väri", name: style, widget: select, default: accent, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }, { label: "Valkoinen reunus", value: outline }] }
+          - label: "Kuvagalleria"
+            name: gallery
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: "Väliotsikko (valinnainen)", name: heading, widget: string, required: false }
+              - label: "Kuvat"
+                name: images
+                widget: list
+                label_singular: "kuva"
+                summary: "{{fields.alt}}"
+                fields:
+                  - { label: "Kuva", name: src, widget: image }
+                  - { label: "Kuvan kuvaus (näkövammaisille ja hakukoneille)", name: alt, widget: string }
+                  - { label: "Kuvateksti / kuvaaja (valinnainen)", name: caption, widget: string, required: false }
+          - label: "Kysymykset ja vastaukset"
+            name: faq
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: "Väliotsikko (valinnainen)", name: heading, widget: string, required: false }
+              - label: "Kysymykset"
+                name: items
+                widget: list
+                label_singular: "kysymys"
+                summary: "{{fields.question}}"
+                fields:
+                  - { label: "Kysymys", name: question, widget: string }
+                  - { label: "Vastaus", name: answer, widget: markdown }
+          - label: "Tietolaatikko"
+            name: infoBox
+            widget: object
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Otsikko", name: title, widget: string, required: false }
+              - { label: "Teksti", name: text, widget: markdown, buttons: [bold, italic, link, bulleted-list], editor_components: [] }
 
   - name: sivut
     label: "Sivut"
@@ -204,3 +303,29 @@ collections:
                 fields:
                   - { label: "Teksti", name: text, widget: string }
                   - { label: "Linkki", name: url, widget: string }
+
+      - name: varit
+        label: "Värit"
+        file: src/_data/theme.json
+        description: "Sivuston värit. Jos valittu väri tekisi tekstistä vaikealukuisen, sivusto käyttää automaattisesti oletusväriä."
+        fields:
+          - { label: "Otsikot (oletus #ff6666)", name: heading, widget: color, allowInput: true, hint: "Isot otsikot tummalla taustalla." }
+          - { label: "Linkit ja valikon korostus (oletus #ff8080)", name: link, widget: color, allowInput: true, hint: "Pitää erottua selvästi tummalta taustalta." }
+          - { label: "Pääpainike (oletus #c93c3c)", name: button, widget: color, allowInput: true, hint: "Painikkeen teksti on valkoinen, joten valitse riittävän tumma väri." }
+          - { label: "Toissijainen painike (oletus #3d6fd1)", name: buttonAlt, widget: color, allowInput: true, hint: "Painikkeen teksti on valkoinen, joten valitse riittävän tumma väri." }
+          - { label: "Sivun tausta (oletus #232323)", name: background, widget: color, allowInput: true, hint: "Tumma väri; teksti on valkoista." }
+          - { label: "Paneelien tausta (oletus #353535)", name: panel, widget: color, allowInput: true, hint: "Tumma väri; teksti on valkoista." }
+
+      - name: uudelleenohjaukset
+        label: "Uudelleenohjaukset"
+        file: src/_data/redirects.json
+        description: "Vanhat osoitteet, jotka ohjataan uuteen paikkaan (esim. jos sivu on siirretty)."
+        fields:
+          - label: "Ohjaukset"
+            name: redirects
+            widget: list
+            label_singular: "ohjaus"
+            summary: "{{fields.from}} → {{fields.to}}"
+            fields:
+              - { label: "Vanha osoite", name: from, widget: string, pattern: ["^/[^\\s]*$", "Osoitteen pitää alkaa kauttaviivalla, esim. /vanha-sivu.html"], hint: "Esim. /page6.html. Ei saa olla olemassa olevan sivun osoite – muuten julkaisu epäonnistuu ja vanha versio jää näkyviin." }
+              - { label: "Uusi osoite", name: to, widget: string, pattern: ["^(/|https?://)[^\\s]*$", "Alkaa kauttaviivalla (/uutiset/...) tai https://"], hint: "Esim. /uutiset/uudet-nettisivut/ tai https://..." }

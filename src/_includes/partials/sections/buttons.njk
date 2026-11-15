@@ -1,0 +1,10 @@
+{#- Row of buttons. Expects `s.buttons`: [{ text, url, style }] (style: accent | primary | outline).
+    Empty entries (e.g. an unused second button) are skipped. -#}
+{%- set realButtons = (s.buttons or []) | select | selectattr("text") %}
+{%- if realButtons | length %}
+<p class="actions">
+  {%- for b in realButtons %}
+  <a class="btn btn--{{ b.style or 'accent' }}" href="{{ b.url }}"{% if b.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ b.text }}</a>
+  {%- endfor %}
+</p>
+{%- endif %}

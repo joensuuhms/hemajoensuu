@@ -1,19 +1,23 @@
 ---
 pagination:
-  data: redirects
+  data: redirects.redirects
   size: 1
   alias: r
 permalink: "{{ r.from }}"
 eleventyExcludeFromCollections: true
 ---
+{#- `to` is a site path ("/uutiset/…/") or a full https:// address. The HTML base plugin adds
+    the path prefix to site paths, including inside the meta refresh. -#}
+{%- set external = r.to | isExternal %}
+{%- set target = r.to %}
 <!doctype html>
 <html lang="fi">
 <head>
   <meta charset="utf-8">
   <title>Sivu on siirtynyt</title>
   <meta name="robots" content="noindex">
-  <meta http-equiv="refresh" content="0; url={{ r.to }}">
-  <link rel="canonical" href="{{ baseUrl }}/{{ r.to }}">
+  <meta http-equiv="refresh" content="0; url={{ target }}">
+  <link rel="canonical" href="{{ r.to if external else (baseUrl + r.to) }}">
 </head>
 <body>
   <p>Sivu on siirtynyt osoitteeseen <a href="{{ r.to }}">{{ r.to }}</a>.</p>

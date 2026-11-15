@@ -1,4 +1,7 @@
-/* HEMAJoensuu – sivuston tyylit. Värit ja mitat on koottu muuttujiksi alle. */
+/* HEMAJoensuu – sivuston tyylit. Värit ja mitat on koottu muuttujiksi alle.
+   The six editable colours (--bg, --panel, --accent, --link, --btn-accent, --btn-primary)
+   are overridden from the CMS (Asetukset → Värit) by an inline <style> in base.njk,
+   after a contrast check in src/_data/themeVars.js. The values here are the defaults. */
 :root {
   --bg: #232323;
   --panel: #353535;
@@ -8,12 +11,14 @@
   --accent: #ff6666;
   /* Links and small red text: ≥4.5:1 on all dark backgrounds */
   --link: #ff8080;
-  --link-hover: #ffb3b3;
   /* Button backgrounds: white text on these is ≥4.5:1 */
   --btn-accent: #c93c3c;
-  --btn-accent-hover: #a82e2e;
   --btn-primary: #3d6fd1;
-  --btn-primary-hover: #2f5fbf;
+  /* Hover shades follow whatever colours are chosen in the CMS.
+     Lighter link / darker button only ever increase contrast. */
+  --link-hover: color-mix(in oklab, var(--link), white 40%);
+  --btn-accent-hover: color-mix(in oklab, var(--btn-accent), black 18%);
+  --btn-primary-hover: color-mix(in oklab, var(--btn-primary), black 15%);
   --card: #fafafa;
   --card-text: #232323;
   --card-link: #2f63c4;
@@ -49,6 +54,21 @@ a:hover { color: var(--link-hover); }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.preview-banner {
+  position: fixed;
+  top: calc(var(--nav-h) + .5rem);
+  left: 50%;
+  z-index: 150;
+  translate: -50% 0;
+  margin: 0;
+  padding: .4rem 1rem;
+  border-radius: 4px;
+  background: #ffd84d;
+  color: #1a1a1a;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .4);
 }
 .skip-link { position: absolute; left: -9999px; top: 0; z-index: 200; }
 .skip-link:focus { left: 1rem; top: 1rem; padding: .5rem 1rem; background: #fff; color: #000; }
@@ -216,6 +236,20 @@ a:hover { color: var(--link-hover); }
 .info-box__title { margin: 0 0 .5rem; font-size: 1.25rem; line-height: 1.3; }
 .info-box .prose { font-size: 1.05rem; }
 .info-box .prose > :last-child { margin-bottom: 0; }
+
+/* ---------- Section builder (Omat sivut) ---------- */
+.custom-page { max-width: 60rem; }
+.page-section { margin-top: 3rem; }
+.page-section > :first-child { margin-top: 0; }
+.page-section .info-box, .page-section .faq, .page-section .actions { margin-top: 0; }
+.page-section--gallery { max-width: none; }
+.section-heading { margin: 0 0 1rem; font-size: clamp(1.5rem, 1.25rem + 1vw, 2.1rem); line-height: 1.2; color: var(--accent); }
+.image-text { display: grid; gap: 1.5rem 2.5rem; align-items: center; }
+.image-text__image img { width: 100%; border-radius: 4px; }
+@media (min-width: 768px) {
+  .image-text { grid-template-columns: 1fr 1fr; }
+  .image-text--right .image-text__image { order: 2; }
+}
 
 /* ---------- FAQ accordion (native <details>) ---------- */
 .faq { margin-top: 2rem; border-top: 1px solid rgba(255, 255, 255, .25); }

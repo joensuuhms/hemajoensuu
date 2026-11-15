@@ -1,0 +1,13 @@
+{#- Question/answer accordion built from native <details>. Expects `s.items`: [{ question, answer }]
+    and optionally `s.heading`. -#}
+{%- if s.items and s.items.length %}
+{%- if s.heading %}<h2 class="section-heading">{{ s.heading }}</h2>{% endif %}
+<div class="faq">
+  {%- for item in s.items %}
+  <details class="faq__item">
+    <summary class="faq__q">{{ item.question }}</summary>
+    <div class="faq__a prose">{{ item.answer | md | safe }}</div>
+  </details>
+  {%- endfor %}
+</div>
+{%- endif %}
