@@ -5,37 +5,48 @@ Sivustoa päivitetään selaimella sisällönhallinnan (CMS) kautta. Koodia ei t
 ## Kirjautuminen
 
 1. Mene osoitteeseen **https://hemajoensuu.fi/admin/**.
-2. Valitse **Login with GitHub** ja kirjaudu GitHub-tunnuksellasi.
+2. Valitse **Kirjaudu GitHub-tunnuksella**.
    - Jos sinulla ei ole tunnusta, luo ilmainen tunnus osoitteessa github.com.
    - Pyydä sitten ylläpitäjää lisäämään sinut sivuston muokkaajaksi (ohje ylläpitäjälle on tämän sivun lopussa).
 
-Sisällönhallinnan omat painikkeet ovat englanniksi, mutta kaikki kentät on nimetty suomeksi.
+Sisällönhallinta on kokonaan suomeksi. Oikeassa alakulmassa oleva punainen **?**-painike avaa tämän ohjeen uuteen välilehteen.
+
+### Näin sisällönhallinta toimii
+
+- Vasemmalla ovat **osiot**: Uutiset, Sivut, Omat sivut, Asetukset ja Ylläpito.
+- Kun avaat jonkin sisällön, vasemmalla on lomake ja oikealla **esikatselu**. Esikatselu näyttää, miltä sisältö näyttää sivustolla, ja päivittyy sitä mukaa kuin kirjoitat.
+- Jokaisen kentän alla on lyhyt ohje ja esimerkki. Kentät, joissa lukee *(valinnainen)*, voi jättää tyhjiksi.
 
 ## Uuden uutisen lisääminen
 
-1. Valitse vasemmalta **Uutiset** ja paina **New uutinen**.
+1. Valitse vasemmalta **Uutiset** ja paina **＋ Uusi uutinen**.
 2. Täytä kentät:
-   - **Otsikko**, **Päivämäärä** ja **Kirjoittaja**.
-   - **Lyhyt tiivistelmä**, joka näkyy uutiskortissa Ajankohtaista-sivulla.
+   - **Otsikko**. Päivämääräksi tulee valmiiksi tämä päivä.
+   - **Kirjoittaja** ja **Lyhyt tiivistelmä**. Tiivistelmä näkyy uutiskortissa Ajankohtaista-sivulla.
    - **Kortin kuva**, joka näkyy uutiskortissa. Kuva on vapaaehtoinen.
-   - **Artikkelin kuva**, esimerkiksi kurssin mainosjuliste. Muista täyttää myös kuvan kuvaus.
-   - **Teksti**, eli itse uutinen. Tekstiä voi lihavoida ja kursivoida, ja siihen voi lisätä linkkejä samaan tapaan kuin Wordissa.
-3. Paina ylhäältä **Save**. Uutinen tallentuu luonnokseksi, eikä se vielä näy sivustolla.
-4. Kun uutinen on valmis, vaihda tilaksi **Ready** (Set status → Ready).
-5. Ylläpitäjä julkaisee uutisen. Jos sinulla on julkaisuoikeus, voit painaa itse **Publish → Publish now**.
+   - **Teksti**, eli itse uutinen. Työkalurivillä voit lihavoida ja kursivoida tekstiä, lisätä linkkejä, väliotsikoita ja luetteloita sekä lisätä kuvia.
+   - Tarvittaessa **artikkelin kuva**, esimerkiksi kurssin mainosjuliste. Muista täyttää myös kuvan kuvaus.
+3. Tarkista esikatselusta, miltä uutinen ja sen uutiskortti näyttävät.
+4. Paina ylhäältä **Tallenna**. Uutinen tallentuu luonnokseksi, eikä se vielä näy sivustolla.
+5. Kun uutinen on valmis, vaihda tilaksi **Valmis**.
+6. Ylläpitäjä julkaisee uutisen. Jos sinulla on julkaisuoikeus, voit itse valita **Julkaise → Julkaise nyt**.
 
 Sivusto päivittyy noin 1–2 minuutin kuluttua julkaisusta.
+
+Uutislistassa luonnokset on merkitty sanalla **LUONNOS**. Kohdasta **Suodata → Luonnokset** näet pelkät luonnokset, ja kohdasta **Ryhmittele → Vuosi** uutiset ryhmiteltyinä vuosittain.
 
 ### Luonnos ja ajastettu julkaisu
 
 - **Luonnos – ei näy sivustolla**: kun ruutu on valittuna, uutinen pysyy piilossa myös julkaisun jälkeen. Poista valinta, kun uutinen saa näkyä.
-- **Julkaise automaattisesti**: valitse päivä ja kellonaika, jolloin uutinen tulee näkyviin. Sivusto tarkistaa ajastetut uutiset kerran tunnissa, joten uutinen näkyy viimeistään tunnin kuluttua valitusta ajasta. Muista silti julkaista uutinen (Publish) etukäteen.
+- **Julkaise automaattisesti**: valitse päivä ja kellonaika, jolloin uutinen tulee näkyviin. Sivusto tarkistaa ajastetut uutiset kerran tunnissa, joten uutinen näkyy viimeistään tunnin kuluttua valitusta ajasta. Muista silti julkaista uutinen (**Julkaise**) etukäteen.
+
+Nämä kaksi kenttää ovat lomakkeen lopussa.
 
 ## Uuden sivun luominen (Omat sivut)
 
-1. Valitse **Omat sivut** ja paina **New sivu**.
-2. Valitse **Sivun tyyli**: *Tavallinen* (tumma tausta) tai *Taustakuvalla*.
-3. Lisää **Osiot**-kohtaan haluamasi osat. Niitä voi järjestää vetämällä. Vaihtoehdot ovat:
+1. Valitse **Omat sivut** ja paina **＋ Uusi sivu**.
+2. Kirjoita **Sivun nimi** ja valitse **Sivun tyyli**: *Tavallinen* (tumma tausta) tai *Iso taustakuva*.
+3. Lisää osat painikkeella **Lisää osio**. Osioita voi järjestää vetämällä, ja esikatselu näyttää ne heti. Vaihtoehdot ovat:
    - Teksti
    - Kuva ja teksti
    - Painikkeet
@@ -47,7 +58,7 @@ Sivusto päivittyy noin 1–2 minuutin kuluttua julkaisusta.
 
 ## Sivujen muokkaaminen
 
-Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata:
+Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata. Lomakkeessa ovat ensin sivun tekstit ja sen jälkeen ulkoasu (taustakuva, tummennus ja otsikon väri). Lopussa ovat hakukoneille näkyvät tiedot.
 
 - **Etusivu**: esittelyteksti, painikkeet ja harjoitusaikojen tietolaatikko. Muista päivittää tietolaatikko, jos harjoitusajat muuttuvat.
 - **Tietoa lajista**
@@ -58,14 +69,18 @@ Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata:
 
 **Asetukset**-kohdasta voi muuttaa:
 
-- **Sivuston tiedot**: nimi, somelinkit, sähköposti ja alatunniste.
+- **Sivuston tiedot**: nimi, sähköposti, somelinkit ja alatunniste.
 - **Päävalikko**: valikon kohdat ja niiden järjestys.
+
+**Ylläpito (vain ylläpitäjälle)** sisältää tekniset asetukset. Virheellinen muutos niissä voi muuttaa koko sivuston ulkoasua tai osoitetta. Jokainen muokkaaja pystyy teknisesti avaamaan ne, mutta ne on erotettu omaksi osiokseen, ettei niitä muuteta vahingossa.
+
 - **Värit**: otsikoiden, linkkien, painikkeiden ja taustojen värit. Jos valittu väri tekisi tekstistä vaikealukuisen, sivusto käyttää sen sijaan oletusväriä.
 - **Uudelleenohjaukset**: vanha osoite ohjataan uuteen, esimerkiksi kun sivu siirretään. Vanha osoite ei saa olla minkään olemassa olevan sivun osoite.
+- **Verkkotunnus**: sivuston oma osoite (hemajoensuu.fi). Muuta vain, jos verkkotunnuksen asetukset on jo tehty.
 
 ## Kuvat
 
-- Lisää kuvat kuvakenttien kautta (**Choose an image → Upload**).
+- Lisää kuvat kuvakenttien kautta: **Valitse kuva → Lataa uusi kuva**. Jo ladatun kuvan voi valita listasta.
 - Sivusto pienentää ja pakkaa kuvat automaattisesti. Käytä kuitenkin mieluiten alle 3 Mt:n kuvia.
 - Taustakuvien kannattaa olla tummia tai tummennettuja, jotta valkoinen teksti erottuu niiden päältä.
 - Kirjoita jokaiselle kuvalle lyhyt **kuvaus**, esimerkiksi ”Kaksi miekkailijaa harjoittelee pitkämiekoilla”. Ruudunlukijat lukevat kuvauksen ääneen näkövammaisille käyttäjille, ja kuvaus auttaa myös hakukoneita.
@@ -128,7 +143,7 @@ Muokkaaja saa samalla oikeuden ajaa varmuuskopiointia ja palautusta GitHubin Act
 
 ### Julkaisuoikeus
 
-Muokkaajan tallennukset menevät ensin luonnoksiksi (**Save → Ready**). Huomaa, että kaikilla muokkaajilla on teknisesti oikeus myös julkaista (**Publish**). Jos haluat, että vain ylläpitäjä julkaisee, sopikaa siitä yhdessä. Vaihtoehtoisesti kehittäjä voi ottaa käyttöön GitHubin haarasuojauksen (ks. README.md).
+Muokkaajan tallennukset menevät ensin luonnoksiksi (**Tallenna → Valmis**). Kaikki odottavat muutokset näkyvät sisällönhallinnan **Julkaisujono**-näkymässä. Huomaa, että kaikilla muokkaajilla on teknisesti oikeus myös julkaista (**Julkaise**). Jos haluat, että vain ylläpitäjä julkaisee, sopikaa siitä yhdessä. Vaihtoehtoisesti kehittäjä voi ottaa käyttöön GitHubin haarasuojauksen (ks. README.md).
 
 ### Muokkaajan poistaminen
 

@@ -10,17 +10,21 @@ Club members' editing guide (in Finnish): [OHJEET.md](OHJEET.md).
 |---|---|
 | `src/sivut/*.md` | Pages: front page, Tietoa lajista, FAQ, contact, gallery, Ajankohtaista. File name = URL (`faq.md` → `/faq.html`). |
 | `src/uutiset/*.md` | News articles → `/uutiset/<file-name>/`, listed newest first on `/needtoknow.html` |
-| `src/_data/site.json` | Site name, social links, email, footer, custom domain |
+| `src/_data/site.json` | Site name, social links, email, footer |
+| `src/_data/yllapito.json` | Custom domain (CMS → Ylläpito → Verkkotunnus); used for `CNAME`, sitemap and canonical URLs |
 | `src/_data/navigation.json` | Main menu |
 | `src/404.njk` | Finnish "page not found" page (GitHub Pages serves `/404.html` automatically) |
 | `src/omat-sivut/*.md` | Pages created in the CMS with the section builder → `/<file-name>/` (layout `custom-page.njk`) |
-| `src/_data/redirects.json` | Old URLs that redirect to new ones (editable in CMS → Asetukset → Uudelleenohjaukset) |
-| `src/_data/theme.json`, `themeVars.js` | Site colours (CMS → Asetukset → Värit). `themeVars.js` checks WCAG contrast and falls back to the default colour, printing a `[theme]` warning in the build log, if a colour would be unreadable. |
+| `src/_data/redirects.json` | Old URLs that redirect to new ones (editable in CMS → Ylläpito → Uudelleenohjaukset) |
+| `src/_data/theme.json`, `themeVars.js` | Site colours (CMS → Ylläpito → Värit). `themeVars.js` checks WCAG contrast and falls back to the default colour, printing a `[theme]` warning in the build log, if a colour would be unreadable. |
 | `src/_includes/partials/sections/` | Section partials shared by the fixed pages and the section builder. Sections with images (`carousel`, `imageText`) are JS shortcodes in `eleventy.config.js`, because Nunjucks includes that use async shortcodes render nothing inside loops. |
 | `src/uploads/` | Images (the CMS uploads here). Resized/converted to WebP automatically at build time. |
 | `src/_includes/` | Layouts and partials (Nunjucks) |
 | `src/css/style.css`, `src/js/main.js` | All styling and the small script for menu + gallery |
-| `src/admin/config.yml` | CMS collections and fields |
+| `src/admin/config.yml` | CMS collections and fields (`locale: fi`) |
+| `src/admin/locale-fi.js` | Finnish translation of Decap's interface (same keys as `decap-cms-locales` `en`; missing keys fall back to English). Check for new keys when upgrading Decap. |
+| `src/admin/cms.js`, `preview.css` | Registers the locale and preview templates (news, hero pages, gallery, section builder) using the site's own `style.css`, then calls `CMS.init()` (`CMS_MANUAL_INIT` is set in `index.html`). |
+| `src/admin-ohje.njk` | `/admin/ohje/`: the editor guide rendered from `OHJEET.md`, opened by the "?" button in the CMS |
 | `legacy/` | The old Mobirise export, kept until cutover; not published |
 
 ## Local development
