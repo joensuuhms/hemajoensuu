@@ -1,0 +1,32 @@
+---
+permalink: /admin/ohje/index.html
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Ohje: sivuston päivittäminen | {{ site.title }}</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { display: block; }
+    .ohje { max-width: 48rem; margin: 0 auto; padding: 2.5rem 16px 4rem; }
+    .ohje h1 { color: var(--accent); font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.6rem); line-height: 1.15; }
+    .ohje h2 { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, .2); color: var(--accent); }
+    .ohje h3 { margin-top: 1.75rem; }
+    .ohje li { margin-bottom: .35em; }
+    .ohje code { padding: .1em .35em; border-radius: 3px; background: var(--panel); }
+    .ohje-back { display: inline-block; margin-bottom: 1rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main class="ohje">
+    <a class="ohje-back" href="../">&larr; Takaisin sisällönhallintaan</a>
+    <div class="prose">
+      {{ "OHJEET.md" | mdFile | safe }}
+    </div>
+  </main>
+</body>
+</html>
