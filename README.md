@@ -107,6 +107,6 @@ GitHub Pages cannot do the OAuth handshake that the CMS needs, so a tiny free Cl
 
 ### Giving club members access
 
-Each editor needs a free GitHub account. Invite them under **Repo → Settings → Collaborators** with the *Write* role.
+Each editor needs a free GitHub account. Invite them under **Repo → Settings → Collaborators → Add people**. The repo is owned by a personal account (`joensuuhms`), so collaborators always get write access: there are no roles to pick. Step-by-step instructions in Finnish are in `OHJEET.md` ("Ylläpitäjälle").
 
 `publish_mode: editorial_workflow` is on, so their edits are saved as drafts (pull requests). They appear live only when someone moves them to *Ready* and clicks *Publish* in the CMS *Workflow* view. Branch protection on `master` can enforce that drafts get reviewed.

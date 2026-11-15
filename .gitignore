@@ -1,5 +1,25 @@
+# Dependencies and build output
 node_modules/
 _site/
 .cache/
+
 # Local backup files (npm run backup)
 backups/
+# Note: palautus/ must NOT be ignored – restores are started by uploading a zip there.
+
+# Secrets / local environment
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+
+# Local tool and editor files
+.claude/settings.local.json
+.remember/
+.playwright-mcp/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -7,7 +7,7 @@ Sivustoa päivitetään selaimella sisällönhallinnan (CMS) kautta. Koodia ei t
 1. Mene osoitteeseen **https://hemajoensuu.fi/admin/**.
 2. Valitse **Login with GitHub** ja kirjaudu GitHub-tunnuksellasi.
    - Jos sinulla ei ole tunnusta, luo ilmainen tunnus osoitteessa github.com.
-   - Pyydä sitten ylläpitäjää lisäämään sinut sivuston muokkaajaksi.
+   - Pyydä sitten ylläpitäjää lisäämään sinut sivuston muokkaajaksi (ohje ylläpitäjälle on tämän sivun lopussa).
 
 Sisällönhallinnan omat painikkeet ovat englanniksi, mutta kaikki kentät on nimetty suomeksi.
 
@@ -109,6 +109,33 @@ Huom! Palautus palauttaa sisällön täsmälleen varmuuskopion mukaiseksi. Varmu
 3. Tarkista ja yhdistä syntynyt pull request.
 
 Jos varmuuskopiotiedosto on vioittunut tai muokattu, palautus pysähtyy virheeseen eikä mitään muuteta.
+
+## Ylläpitäjälle: muokkaajien lisääminen ja poistaminen
+
+Sivustoa voi muokata jokainen, jolla on kirjoitusoikeus GitHub-repositorioon `joensuuhms/web`. Oikeuksia voi muuttaa vain repositorion omistaja eli joensuuhms-tunnus.
+
+### Muokkaajan lisääminen
+
+1. Pyydä uutta muokkaajaa luomaan ilmainen tunnus osoitteessa **github.com** ja kertomaan sinulle käyttäjätunnuksensa.
+2. Kirjaudu GitHubiin joensuuhms-tunnuksella ja avaa **github.com/joensuuhms/web**.
+3. Valitse ylävalikosta **Settings** ja vasemmalta **Collaborators**. GitHub voi pyytää salasanan tai kaksivaiheisen tunnistautumisen uudelleen.
+4. Paina **Add people**, kirjoita käyttäjätunnus tai sähköpostiosoite ja valitse oikea henkilö listasta.
+5. Paina **Add … to this repository**. GitHub lähettää kutsun sähköpostitse.
+6. Muokkaaja hyväksyy kutsun sähköpostin linkistä tai osoitteessa **github.com/notifications**. Kutsu on voimassa 7 päivää.
+7. Muokkaaja voi nyt kirjautua sisällönhallintaan osoitteessa **https://hemajoensuu.fi/admin/** (ks. Kirjautuminen).
+
+Muokkaaja saa samalla oikeuden ajaa varmuuskopiointia ja palautusta GitHubin Actions-sivulla.
+
+### Julkaisuoikeus
+
+Muokkaajan tallennukset menevät ensin luonnoksiksi (**Save → Ready**). Huomaa, että kaikilla muokkaajilla on teknisesti oikeus myös julkaista (**Publish**). Jos haluat, että vain ylläpitäjä julkaisee, sopikaa siitä yhdessä. Vaihtoehtoisesti kehittäjä voi ottaa käyttöön GitHubin haarasuojauksen (ks. README.md).
+
+### Muokkaajan poistaminen
+
+1. Avaa **Settings → Collaborators**.
+2. Paina poistettavan henkilön kohdalla **Remove** ja vahvista.
+
+Oikeus poistuu heti. Henkilön aiemmat muutokset jäävät sivuston historiaan.
 
 ## Jos jokin menee pieleen
 
