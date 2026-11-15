@@ -12,12 +12,12 @@
           <button class="dropdown-toggle" type="button" aria-expanded="false">{{ item.text }}</button>
           <ul class="dropdown">
             {%- for child in item.children %}
-            <li><a href="{{ child.url }}"{% if child.url == page.url %} aria-current="page"{% endif %}{% if child.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ child.text }}</a></li>
+            <li><a href="{{ child.url | safeUrl }}"{% if child.url == page.url %} aria-current="page"{% endif %}{% if child.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ child.text }}</a></li>
             {%- endfor %}
           </ul>
         </li>
         {%- else %}
-        <li><a href="{{ item.url }}"{% if item.url == page.url %} aria-current="page"{% endif %}{% if item.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ item.text }}</a></li>
+        <li><a href="{{ item.url | safeUrl }}"{% if item.url == page.url %} aria-current="page"{% endif %}{% if item.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ item.text }}</a></li>
         {%- endif %}
         {%- endfor %}
       </ul>

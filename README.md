@@ -41,6 +41,25 @@ News posts and section-builder pages have two extra front-matter fields:
 
 This is the `unpublished` preprocessor in `eleventy.config.js`. In local preview (`npm start`) both are still shown, with a yellow "LUONNOS" / "AJASTETTU" banner.
 
+## Security measures
+
+**Content from the CMS is treated as untrusted:**
+- **Links** in buttons, the menu and social links pass through `safeUrl` (in `eleventy.config.js`), which allows only `/…`, `#…`, `http(s)://`, `mailto:` and `tel:`. Anything else becomes `#`, with a `[security]` warning in the build log. The CMS forms check the same rule.
+- **Markdown** is rendered with `html: false`: raw HTML such as `<script>` is shown as text, not executed. markdown-it also refuses `javascript:` and `data:` links.
+- **Images** must be in `/uploads/` or be an `https://` address. Any other path is ignored, with a warning.
+- **Redirects** are checked in `src/_data/redirectsValid.js`. An invalid, duplicate or clashing entry is skipped with a `[redirects]` warning, so it can never break the build.
+- **Site colours** are checked for contrast in `themeVars.js` and only accepted as `#rrggbb`.
+
+**The browser side:**
+- Every page has a **Content-Security-Policy** `<meta>` tag allowing only same-origin scripts, styles and fonts. GitHub Pages can't send security headers.
+  - Inline styles are allowed because the background images and theme colours use them.
+  - The CMS page (`/admin/`) has no CSP. It loads Decap from unpkg with a Subresource Integrity hash, so a changed file is refused.
+- The **Jost font is hosted on the site** (`src/fonts/`, SIL OFL 1.1), so visitor IP addresses aren't sent to Google Fonts (GDPR).
+
+**Dependencies:**
+- `npm audit` still lists issues in `decap-server`'s sub-dependencies. It's only the local CMS test server: it listens on localhost and is never deployed.
+- When upgrading Decap, recompute the integrity hash in `src/admin/index.html`.
+
 ## Backup and restore
 
 `scripts/backup.mjs` makes and restores `.zip` backups. Each archive has a `manifest.json` recording the type, date, source commit and a SHA-256 for every file.

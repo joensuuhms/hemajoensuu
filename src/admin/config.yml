@@ -34,6 +34,10 @@ slug:
   sanitize_replacement: "-"
 
 # Yhteiset kentät (YAML-ankkurit)
+# Links may only point to this site (/…, #…) or to https://, mailto: and tel: addresses.
+# The build enforces the same rule (safeUrl in eleventy.config.js).
+_linkPattern: &linkPattern ["^(/(?!/)|#|https?://|mailto:|tel:)\\S*$", "Linkin pitää alkaa /, https://, mailto: tai tel:"]
+
 _fields:
   title: &title { label: "Sivun otsikko (näkyy selaimen välilehdellä ja hakukoneissa)", name: title, widget: string }
   description: &description { label: "Kuvaus hakukoneille (1–2 lausetta)", name: description, widget: text, required: false }
@@ -53,7 +57,7 @@ _fields:
     collapsed: true
     fields:
       - { label: "Painikkeen teksti", name: text, widget: string, required: false }
-      - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, required: false }
+      - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, required: false, pattern: *linkPattern }
       - { label: "Väri", name: style, widget: select, default: accent, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }, { label: "Valkoinen reunus", value: outline }] }
   button2: &button2
     label: "Toinen painike"
@@ -63,7 +67,7 @@ _fields:
     collapsed: true
     fields:
       - { label: "Painikkeen teksti", name: text, widget: string, required: false }
-      - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, required: false }
+      - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, required: false, pattern: *linkPattern }
       - { label: "Väri", name: style, widget: select, default: outline, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }, { label: "Valkoinen reunus", value: outline }] }
 
 collections:
@@ -145,7 +149,7 @@ collections:
                 summary: "{{fields.text}}"
                 fields:
                   - { label: "Painikkeen teksti", name: text, widget: string }
-                  - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string }
+                  - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, pattern: *linkPattern }
                   - { label: "Väri", name: style, widget: select, default: accent, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }, { label: "Valkoinen reunus", value: outline }] }
           - label: "Kuvagalleria"
             name: gallery
@@ -293,7 +297,7 @@ collections:
             summary: "{{fields.text}}"
             fields:
               - { label: "Teksti", name: text, widget: string }
-              - { label: "Linkki (tyhjä, jos kohdalla on alavalikko)", name: url, widget: string, required: false }
+              - { label: "Linkki (tyhjä, jos kohdalla on alavalikko)", name: url, widget: string, required: false, pattern: *linkPattern }
               - label: "Alavalikko"
                 name: children
                 widget: list
@@ -302,7 +306,7 @@ collections:
                 summary: "{{fields.text}}"
                 fields:
                   - { label: "Teksti", name: text, widget: string }
-                  - { label: "Linkki", name: url, widget: string }
+                  - { label: "Linkki", name: url, widget: string, pattern: *linkPattern }
 
       - name: varit
         label: "Värit"
@@ -327,5 +331,5 @@ collections:
             label_singular: "ohjaus"
             summary: "{{fields.from}} → {{fields.to}}"
             fields:
-              - { label: "Vanha osoite", name: from, widget: string, pattern: ["^/[^\\s]*$", "Osoitteen pitää alkaa kauttaviivalla, esim. /vanha-sivu.html"], hint: "Esim. /page6.html. Ei saa olla olemassa olevan sivun osoite – muuten julkaisu epäonnistuu ja vanha versio jää näkyviin." }
-              - { label: "Uusi osoite", name: to, widget: string, pattern: ["^(/|https?://)[^\\s]*$", "Alkaa kauttaviivalla (/uutiset/...) tai https://"], hint: "Esim. /uutiset/uudet-nettisivut/ tai https://..." }
+              - { label: "Vanha osoite", name: from, widget: string, pattern: ["^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~%/-]*(\\.html?|/)$", "Alkaa kauttaviivalla ja päättyy .html tai /, esim. /vanha-sivu.html"], hint: "Esim. /page6.html tai /vanha-sivu/. Ei saa olla olemassa olevan sivun osoite – sellainen ohjaus ohitetaan." }
+              - { label: "Uusi osoite", name: to, widget: string, pattern: ["^(/(?!/)|https://)(?!.*\\.\\.)[^\\s\"'<>]*$", "Alkaa kauttaviivalla (/uutiset/...) tai https://"], hint: "Esim. /uutiset/uudet-nettisivut/ tai https://..." }

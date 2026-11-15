@@ -6,7 +6,10 @@ import markdownIt from "markdown-it";
 // GitHub Actions sets PATH_PREFIX ("/web/" on github.io, "/" with a custom domain).
 const pathPrefix = (process.env.PATH_PREFIX || "/").replace(/\/?$/, "/");
 
-const md = markdownIt({ html: true, linkify: true, breaks: true });
+// One Markdown renderer for everything (page bodies and CMS text fields).
+// html: false – raw HTML typed into the CMS (e.g. <script>) is shown as text, not executed.
+// markdown-it also refuses javascript:/vbscript:/data: links on its own.
+const md = markdownIt({ html: false, linkify: true, breaks: true });
 
 // `npm start` (serve/watch) is a local preview: drafts and scheduled posts are shown there.
 const isPreview = ["serve", "watch"].includes(process.env.ELEVENTY_RUN_MODE);
@@ -15,10 +18,27 @@ const isFuture = (date) => Boolean(date) && new Date(date) > new Date();
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-// "/uploads/foo.jpg" (as stored by the CMS) -> "src/uploads/foo.jpg"
+// Links entered in the CMS (buttons, menu, social links) may only point to a page on this
+// site ("/…" or "#…") or to https/http, mailto: and tel: addresses. Anything else – such as
+// javascript: – is replaced with "#" and reported in the build log.
+const SAFE_URL = /^(\/(?!\/)|#|https?:\/\/|mailto:|tel:)/i;
+function safeUrl(url) {
+  if (url === undefined || url === null || url === "") return "";
+  const value = String(url).trim();
+  if (SAFE_URL.test(value)) return value;
+  console.warn(`[security] Blocked unsafe link "${value}" – only /…, https://, mailto: and tel: are allowed.`);
+  return "#";
+}
+
+// Images may only come from the site's own uploads folder or from an https address.
+// "/uploads/foo.jpg" (as stored by the CMS) -> "src/uploads/foo.jpg"; anything else -> null.
 function sourcePath(src) {
-  if (/^https?:\/\//.test(src)) return src;
-  return path.join("src", src.replace(/^\/+/, ""));
+  const value = String(src).trim();
+  if (/^https:\/\//i.test(value)) return value;
+  const rel = value.replace(/^\/+/, "");
+  if (rel.startsWith("uploads/") && !rel.split(/[\\/]/).includes("..")) return path.join("src", rel);
+  console.warn(`[security] Ignored image "${value}" – images must be in /uploads/ or an https address.`);
+  return null;
 }
 
 function imageOptions(widths, urlPath = "/img/") {
@@ -34,10 +54,13 @@ function imageOptions(widths, urlPath = "/img/") {
 
 export default function (eleventyConfig) {
   eleventyConfig.addPlugin(HtmlBasePlugin);
+  // Page bodies use the same safe renderer as the CMS text fields.
+  eleventyConfig.setLibrary("md", md);
 
   eleventyConfig.addPassthroughCopy({ "src/uploads": "uploads" });
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/js");
+  eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addPassthroughCopy("src/admin");
   eleventyConfig.ignores.add("src/admin/**");
 
@@ -54,8 +77,9 @@ export default function (eleventyConfig) {
   // priority: "high" = the page's main (LCP) image, "low" = hidden until interaction
   // (e.g. later gallery slides), "eager" = visible on load, otherwise lazy-loaded.
   async function picture(src, alt = "", sizes = "100vw", widths = [480, 960, 1600], priority = "") {
-    if (!src) return "";
-    const metadata = await Image(sourcePath(src), imageOptions(widths));
+    const file = src && sourcePath(src);
+    if (!file) return "";
+    const metadata = await Image(file, imageOptions(widths));
     const attrs = { alt, sizes, decoding: "async" };
     if (priority === "high") attrs.fetchpriority = "high";
     else if (priority === "low") Object.assign(attrs, { loading: "lazy", fetchpriority: "low" });
@@ -103,16 +127,18 @@ export default function (eleventyConfig) {
   // CSS background images are invisible to the browser's preload scanner, so the
   // page's hero background is preloaded from <head> to keep LCP fast.
   eleventyConfig.addShortcode("bgpreload", async (src) => {
-    if (!src) return "";
-    const metadata = await Image(sourcePath(src), imageOptions([1600]));
+    const file = src && sourcePath(src);
+    if (!file) return "";
+    const metadata = await Image(file, imageOptions([1600]));
     return `<link rel="preload" as="image" href="${metadata.webp[0].url}" type="image/webp" fetchpriority="high">`;
   });
 
   // Inline style for a full-width background image. The HTML base plugin does not
   // rewrite URLs inside style attributes, so the path prefix is added here.
   eleventyConfig.addShortcode("bgimage", async (src) => {
-    if (!src) return "";
-    const metadata = await Image(sourcePath(src), imageOptions([1600], `${pathPrefix}img/`));
+    const file = src && sourcePath(src);
+    if (!file) return "";
+    const metadata = await Image(file, imageOptions([1600], `${pathPrefix}img/`));
     const jpeg = metadata.jpeg[0].url;
     const webp = metadata.webp[0].url;
     return `background-image:url('${jpeg}');background-image:image-set(url('${webp}') type('image/webp'),url('${jpeg}') type('image/jpeg'));`;
@@ -120,6 +146,7 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addFilter("md", (text) => (text ? md.render(String(text)) : ""));
   eleventyConfig.addFilter("isExternal", (url) => /^https?:\/\//.test(url || ""));
+  eleventyConfig.addFilter("safeUrl", safeUrl);
   eleventyConfig.addFilter("fiDate", (date) =>
     new Date(date).toLocaleDateString("fi-FI", { day: "numeric", month: "numeric", year: "numeric", timeZone: "UTC" })
   );
