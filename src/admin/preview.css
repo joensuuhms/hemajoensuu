@@ -1,0 +1,20 @@
+/* Adjustments for the CMS preview pane (loaded after the site's style.css).
+   The preview has no fixed navigation or footer, so the extra top/bottom space is removed. */
+body { display: block; min-height: 0; }
+.hero, .section { min-height: 0; padding: 3rem 0; background-attachment: scroll !important; }
+.hero { min-height: 70vh; }
+.preview-banner {
+  position: static;
+  translate: none;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.preview-note { margin: 0 0 1rem; color: var(--muted); font-size: .95rem; font-style: italic; }
+.preview-cards { padding-top: 2rem; border-top: 1px dashed rgba(255, 255, 255, .25); }
+.preview-cards .cards { max-width: 30rem; margin-top: 0; grid-template-columns: 1fr; }
+.preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .75rem; }
+.preview-grid figure { margin: 0; }
+.preview-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; }
+.preview-grid figcaption { padding-top: .3rem; color: var(--muted); font-size: .85rem; }
+.article__image img, .image-text__image img { width: 100%; }

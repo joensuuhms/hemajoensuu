@@ -5,13 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Sisällönhallinta | HEMAJoensuu</title>
+  <style>
+    /* "Ohje" button: always visible, outside the CMS so it works on every screen. */
+    /* Round "?" button in the bottom-right corner (clear of the form fields on the left);
+       the text label appears on hover/focus. */
+    .ohje-link {
+      position: fixed;
+      right: 28px;
+      bottom: 20px;
+      z-index: 400;
+      display: inline-flex;
+      align-items: center;
+      gap: .45em;
+      min-width: 48px;
+      height: 48px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #c93c3c;
+      color: #fff;
+      font: 600 15px/1 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+    }
+    .ohje-link:hover { background: #a82e2e; }
+    .ohje-link:focus-visible { outline: 3px solid #2f63c4; outline-offset: 3px; }
+    .ohje-link .q { font-size: 22px; font-weight: 700; }
+    .ohje-link .label { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .2s; }
+    .ohje-link:hover .label, .ohje-link:focus-visible .label { max-width: 6em; }
+    @media (prefers-reduced-motion: reduce) { .ohje-link .label { transition: none; } }
+  </style>
 </head>
 <body>
+  <a class="ohje-link" href="ohje/" target="_blank" rel="noopener" title="Ohje: näin päivität sivustoa"><span class="q" aria-hidden="true">?</span><span class="label">Ohje</span></a>
+
+  <!-- Register the Finnish interface and previews before the CMS starts (see cms.js). -->
+  <script>window.CMS_MANUAL_INIT = true;</script>
   <!-- Integrity hash verified against the npm package decap-cms@3.17.3. Recompute it when upgrading. -->
   <script
     src="https://unpkg.com/decap-cms@3.17.3/dist/decap-cms.js"
     integrity="sha384-RWRzuHfiZSWCt3nEvG7B0v3cMgM1C2UuJmgBSL92GQh4uXmNSkbcthql/mNBqvjr"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
+  <script src="locale-fi.js"></script>
+  <script src="cms.js"></script>
 </body>
 </html>
