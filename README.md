@@ -12,6 +12,7 @@ Club members' editing guide (in Finnish): [OHJEET.md](OHJEET.md).
 | `src/uutiset/*.md` | News articles → `/uutiset/<file-name>/`, listed newest first on `/needtoknow.html` |
 | `src/_data/site.json` | Site name, social links, email, footer, custom domain |
 | `src/_data/navigation.json` | Main menu |
+| `src/404.njk` | Finnish "page not found" page (GitHub Pages serves `/404.html` automatically) |
 | `src/_data/redirects.json` | Old URLs that redirect to new ones (`page6.html`, `page7.html`) |
 | `src/uploads/` | Images (the CMS uploads here). Resized/converted to WebP automatically at build time. |
 | `src/_includes/` | Layouts and partials (Nunjucks) |

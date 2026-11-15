@@ -30,9 +30,9 @@ Sivusto päivittyy noin 1–2 minuutin kuluttua julkaisusta.
 
 Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata:
 
-- **Etusivu**
+- **Etusivu**: esittelyteksti, painikkeet ja harjoitusaikojen tietolaatikko. Muista päivittää tietolaatikko, jos harjoitusajat muuttuvat.
 - **Tietoa lajista**
-- **Ota yhteyttä**: harjoitusajat, harjoituspaikat ja sähköposti.
+- **Ota yhteyttä** (valikossa ”Yhteystiedot”): harjoitusajat, harjoituspaikat ja sähköposti.
 - **Usein kysyttyä**: kysymyksiä voi lisätä, poistaa ja järjestää uudelleen vetämällä.
 - **Galleria**: kuvia voi lisätä, poistaa ja järjestää uudelleen.
 - **Ajankohtaista**: uutisten listaussivun otsikko ja taustakuva.

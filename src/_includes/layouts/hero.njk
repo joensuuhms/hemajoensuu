@@ -12,15 +12,26 @@ layout: layouts/base.njk
       {%- if faq and faq.length %}
       <div class="faq">
         {%- for item in faq %}
-        <h2 class="faq__q">{{ item.question }}</h2>
-        <div class="faq__a prose">{{ item.answer | md | safe }}</div>
+        <details class="faq__item">
+          <summary class="faq__q">{{ item.question }}</summary>
+          <div class="faq__a prose">{{ item.answer | md | safe }}</div>
+        </details>
         {%- endfor %}
       </div>
       {%- endif %}
-      {%- if button and button.text %}
+      {%- set buttons = [button, button2] %}
+      {%- if (button and button.text) or (button2 and button2.text) %}
       <p class="actions">
-        <a class="btn btn--{{ button.style or 'accent' }}" href="{{ button.url }}"{% if button.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ button.text }}</a>
+        {%- for b in buttons %}{% if b and b.text %}
+        <a class="btn btn--{{ b.style or 'accent' }}" href="{{ b.url }}"{% if b.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ b.text }}</a>
+        {%- endif %}{% endfor %}
       </p>
+      {%- endif %}
+      {%- if infoBox and infoBox.text %}
+      <aside class="info-box" aria-labelledby="info-box-title">
+        <h2 class="info-box__title" id="info-box-title">{{ infoBox.title }}</h2>
+        <div class="prose">{{ infoBox.text | md | safe }}</div>
+      </aside>
       {%- endif %}
     </div>
   </div>

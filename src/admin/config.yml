@@ -52,7 +52,17 @@ _fields:
     fields:
       - { label: "Painikkeen teksti", name: text, widget: string, required: false }
       - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, required: false }
-      - { label: "Väri", name: style, widget: select, default: accent, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }] }
+      - { label: "Väri", name: style, widget: select, default: accent, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }, { label: "Valkoinen reunus", value: outline }] }
+  button2: &button2
+    label: "Toinen painike"
+    name: button2
+    widget: object
+    required: false
+    collapsed: true
+    fields:
+      - { label: "Painikkeen teksti", name: text, widget: string, required: false }
+      - { label: "Linkki (esim. /readmore.html tai https://...)", name: url, widget: string, required: false }
+      - { label: "Väri", name: style, widget: select, default: outline, options: [{ label: "Punainen", value: accent }, { label: "Sininen", value: primary }, { label: "Valkoinen reunus", value: outline }] }
 
 collections:
   - name: uutiset
@@ -83,7 +93,24 @@ collections:
       - name: etusivu
         label: "Etusivu"
         file: src/sivut/index.md
-        fields: [*title, *description, *heroTitle, *heroImage, *titleColor, *overlay, *body, *button]
+        fields:
+          - *title
+          - *description
+          - *heroTitle
+          - *heroImage
+          - *titleColor
+          - *overlay
+          - *body
+          - *button
+          - *button2
+          - label: "Tietolaatikko (esim. harjoitusajat)"
+            name: infoBox
+            widget: object
+            required: false
+            collapsed: true
+            fields:
+              - { label: "Otsikko", name: title, widget: string, required: false }
+              - { label: "Teksti", name: text, widget: markdown, required: false, buttons: [bold, italic, link, bulleted-list], editor_components: [] }
 
       - name: tietoa
         label: "Tietoa lajista"
