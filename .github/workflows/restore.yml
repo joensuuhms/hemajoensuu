@@ -1,0 +1,120 @@
+name: Palautus
+
+# Restores a backup. Nothing changes on the live site directly: the workflow opens a
+# pull request that lists every change, and the site changes only when it is merged.
+#
+# Two ways to start it:
+#  1. Upload a backup .zip into the "palautus/" folder of the repo (Add file → Upload files).
+#  2. Actions → Palautus → Run workflow, and give the run ID of an earlier "Varmuuskopio" run.
+on:
+  push:
+    paths:
+      - "palautus/*.zip"
+  workflow_dispatch:
+    inputs:
+      ajo:
+        description: "Varmuuskopio-ajon numero (run ID) tai ajon osoite"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: palautus
+  cancel-in-progress: false
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Selvitä ajon numero
+        if: github.event_name == 'workflow_dispatch'
+        id: run
+        env:
+          AJO: ${{ inputs.ajo }}
+        run: |
+          # Accept a plain run ID or a full ".../actions/runs/<id>" address.
+          ID=$(printf '%s' "$AJO" | grep -oE '[0-9]{6,}' | tail -n 1)
+          if [ -z "$ID" ]; then echo "::error::Ajon numeroa ei tunnistettu: $AJO"; exit 1; fi
+          echo "id=$ID" >> "$GITHUB_OUTPUT"
+
+      - name: Lataa varmuuskopio GitHubista
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ steps.run.outputs.id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/artifact
+
+      - name: Etsi palautettava tiedosto
+        id: find
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            FILES=$(find "$RUNNER_TEMP/artifact" -name '*.zip' -type f)
+          else
+            FILES=$(find palautus -maxdepth 1 -name '*.zip' -type f 2>/dev/null || true)
+          fi
+          COUNT=$(printf '%s\n' "$FILES" | grep -c . || true)
+          if [ "$EVENT" = "push" ] && [ "$COUNT" -eq 0 ]; then
+            # Merging a restore pull request deletes the zip, which also triggers this workflow.
+            echo "Ei palautettavaa tiedostoa (zip poistettiin) – ei tehtävää." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$COUNT" -ne 1 ]; then
+            echo "::error::Palautettavia zip-tiedostoja pitää olla tasan yksi (löytyi $COUNT)."
+            exit 1
+          fi
+          echo "file=$FILES" >> "$GITHUB_OUTPUT"
+
+      - name: Palauta varmuuskopio
+        if: steps.find.outputs.skip != 'true'
+        env:
+          EVENT: ${{ github.event_name }}
+          FILE: ${{ steps.find.outputs.file }}
+        run: |
+          # Workflow files can't be changed with the built-in token, so they are left as they are.
+          node scripts/backup.mjs restore "$FILE" --keep-workflows --summary "$RUNNER_TEMP/summary.md"
+          # The uploaded .zip is removed in the same pull request.
+          if [ "$EVENT" = "push" ]; then git rm -q -- "$FILE"; fi
+
+      - name: Avaa pull request
+        if: steps.find.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.ref_name }}
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Ei muutettavaa – sivusto on jo varmuuskopion mukainen." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          BRANCH="palautus-${{ github.run_id }}"
+          DATE=$(TZ=Europe/Helsinki date +'%-d.%-m.%Y %H.%M')
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git commit -q -m "Palautus varmuuskopiosta ($DATE)"
+          git push -q origin "$BRANCH"
+          {
+            echo "Tämä pull request palauttaa sivuston varmuuskopiosta. **Mikään ei muutu ennen kuin tämä yhdistetään (Merge).**"
+            echo ""
+            cat "$RUNNER_TEMP/summary.md"
+            echo ""
+            echo "Jos yhdistät tämän vahingossa, sen voi perua painamalla *Revert*."
+          } > "$RUNNER_TEMP/body.md"
+          URL=$(gh pr create --base "$BASE" --head "$BRANCH" --title "Palautus: varmuuskopio ($DATE)" --body-file "$RUNNER_TEMP/body.md")
+          echo "Pull request: $URL" | tee -a "$GITHUB_STEP_SUMMARY"

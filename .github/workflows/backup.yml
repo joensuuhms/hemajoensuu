@@ -1,0 +1,58 @@
+name: Varmuuskopio
+
+# Run manually from Actions → Varmuuskopio → Run workflow, or automatically every Sunday night.
+# The backup .zip is attached to the run ("Artifacts") and kept for 90 days.
+on:
+  workflow_dispatch:
+    inputs:
+      tyyppi:
+        description: "Mitä varmuuskopioidaan"
+        type: choice
+        options:
+          - sisalto
+          - koko
+        default: sisalto
+  schedule:
+    - cron: "23 1 * * 0"
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Tee varmuuskopio
+        id: make
+        env:
+          TYYPPI: ${{ inputs.tyyppi || 'sisalto' }}
+        run: |
+          if [ "$TYYPPI" = "koko" ]; then FLAG="--full"; else FLAG=""; fi
+          node scripts/backup.mjs backup $FLAG --out backups
+          FILE=$(ls backups/*.zip)
+          echo "name=$(basename "$FILE" .zip)" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Varmuuskopio valmis"
+            echo ""
+            echo "Lataa tiedosto alta kohdasta **Artifacts** (\`$(basename "$FILE")\`)."
+            echo "GitHub pakkaa latauksen vielä kerran zip-tiedostoksi: pura se, niin sisällä on varsinainen varmuuskopio."
+            echo ""
+            echo "Palauttaaksesi tämän varmuuskopion suoraan GitHubista: Actions → Palautus → Run workflow, ja anna ajon numeroksi **${{ github.run_id }}**."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.make.outputs.name }}
+          path: backups/*.zip
+          retention-days: 90
+          compression-level: 0
+          if-no-files-found: error

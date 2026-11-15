@@ -71,6 +71,45 @@ Valitse **Sivut** ja sen jälkeen sivu, jota haluat muokata:
 - Kirjoita jokaiselle kuvalle lyhyt **kuvaus**, esimerkiksi ”Kaksi miekkailijaa harjoittelee pitkämiekoilla”. Ruudunlukijat lukevat kuvauksen ääneen näkövammaisille käyttäjille, ja kuvaus auttaa myös hakukoneita.
 - Varmista, että sinulla on lupa käyttää kuvaa, ja merkitse kuvaaja kuvatekstiin.
 
+## Varmuuskopiointi ja palautus
+
+Varmuuskopioita on kahta tyyppiä:
+
+- **Sisältö**: sivut, uutiset, omat sivut, asetukset, värit ja kuvat. Tätä tarvitaan yleensä.
+- **Koko sivusto**: sisällön lisäksi myös sivuston ohjelmakoodi.
+
+Sisällöstä tehdään varmuuskopio automaattisesti joka sunnuntaiyö. GitHub säilyttää varmuuskopiot 90 päivää.
+
+### Varmuuskopion tekeminen ja lataaminen
+
+1. Avaa sivuston repositorio GitHubissa: **github.com/joensuuhms/web**.
+2. Valitse **Actions** ja vasemmalta **Varmuuskopio**.
+3. Paina **Run workflow**, valitse *sisalto* tai *koko* ja paina vihreää **Run workflow** -painiketta.
+4. Odota noin minuutti ja avaa valmistunut ajo.
+5. Lataa tiedosto kohdasta **Artifacts**. GitHub antaa sen zip-tiedoston sisällä: pura ladattu tiedosto, niin saat varsinaisen varmuuskopion (`hemajoensuu-…zip`).
+6. Säilytä varmuuskopio turvallisessa paikassa.
+
+### Palauttaminen
+
+Palautus ei muuta sivustoa heti. Ensin syntyy **pull request**, jossa näkyy tarkasti, mitkä tiedostot lisätään, muutetaan tai poistetaan. Sivusto muuttuu vasta, kun pull request yhdistetään (**Merge**). Palautuksen voi myöhemmin perua painamalla **Revert**.
+
+Huom! Palautus palauttaa sisällön täsmälleen varmuuskopion mukaiseksi. Varmuuskopion jälkeen lisätyt uutiset ja sivut poistuvat.
+
+**Tapa 1 – omalta koneelta tallennetusta tiedostosta:**
+
+1. Avaa repositorio GitHubissa ja valitse **Add file → Upload files**.
+2. Kirjoita tiedoston nimen eteen kansio `palautus/`, tai luo ensin kansio `palautus`. Lisää varmuuskopiotiedosto (`hemajoensuu-…zip`) ja paina **Commit changes**.
+3. Avaa **Actions → Palautus** ja odota, että ajo valmistuu.
+4. Avaa **Pull requests**, tarkista muutokset ja paina **Merge pull request**.
+
+**Tapa 2 – GitHubiin tallennetusta varmuuskopiosta:**
+
+1. Avaa haluamasi **Varmuuskopio**-ajo ja kopioi sen numero. Numero näkyy ajon yhteenvedossa ja selaimen osoiterivillä (`…/actions/runs/123456789`).
+2. Valitse **Actions → Palautus → Run workflow**, liitä numero kenttään ja paina **Run workflow**.
+3. Tarkista ja yhdistä syntynyt pull request.
+
+Jos varmuuskopiotiedosto on vioittunut tai muokattu, palautus pysähtyy virheeseen eikä mitään muuteta.
+
 ## Jos jokin menee pieleen
 
 Jokaisesta muutoksesta jää historiaan versio, joten mitään ei voi rikkoa pysyvästi. Ota yhteyttä ylläpitäjään, niin hän palauttaa aiemman version.

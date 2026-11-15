@@ -41,6 +41,32 @@ News posts and section-builder pages have two extra front-matter fields:
 
 This is the `unpublished` preprocessor in `eleventy.config.js`. In local preview (`npm start`) both are still shown, with a yellow "LUONNOS" / "AJASTETTU" banner.
 
+## Backup and restore
+
+`scripts/backup.mjs` makes and restores `.zip` backups. Each archive has a `manifest.json` recording the type, date, source commit and a SHA-256 for every file.
+
+| Type | Contains |
+|---|---|
+| content (`sisalto`) | `src/sivut`, `src/uutiset`, `src/omat-sivut` (`*.md`), `src/_data/{site,navigation,theme,redirects}.json`, `src/uploads/**` |
+| full (`koko`) | every git-tracked file (except `backups/`, `palautus/`) |
+
+```sh
+npm run backup                         # content backup -> backups/
+npm run backup -- --full               # full backup
+npm run restore -- file.zip --dry-run  # show what would change
+npm run restore -- file.zip            # restore (then review with git diff and commit)
+```
+
+**How a restore behaves:**
+- It makes the content (or, for a full backup, the whole tracked tree) match the backup exactly. Files missing from the backup are deleted.
+- Before writing anything, it checks the manifest, every checksum and the archive size limits. It also rejects paths with `..` or absolute paths, `.git/` paths, and code files inside a content backup.
+
+**GitHub workflows:**
+- **`backup.yml` ("Varmuuskopio"):** manual (*Run workflow*, choose `sisalto` or `koko`), plus a content backup every Sunday at 01:23 UTC. The zip is stored as an artifact for 90 days.
+- **`restore.yml` ("Palautus"):** starts when a zip is uploaded to `palautus/`, or manually with the run ID of a backup run. It restores on a new branch, deletes the uploaded zip, and opens a **pull request** with a change summary. The live site changes only when the PR is merged.
+- Restores in CI use `--keep-workflows`, because the built-in `GITHUB_TOKEN` cannot push changes to `.github/workflows/`.
+- **One-time setting:** turn on **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests"**. Without it, the restore workflow can't open its pull request.
+
 ## Deployment
 
 Every push to `master` runs `.github/workflows/deploy.yml`, which builds the site and deploys it to GitHub Pages. The workflow also runs **every hour** (`cron: "7 * * * *"`) so scheduled posts go live on time.
