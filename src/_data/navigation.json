@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "text": "Lue lisää",
+      "url": "",
+      "children": [
+        { "text": "Tietoa lajista", "url": "/readmore.html" },
+        { "text": "Ota yhteyttä", "url": "/contact.html" }
+      ]
+    },
+    { "text": "Ajankohtaista", "url": "/needtoknow.html", "children": [] },
+    { "text": "Galleria", "url": "/gallery.html", "children": [] },
+    { "text": "Usein kysyttyä", "url": "/faq.html", "children": [] }
+  ]
+}

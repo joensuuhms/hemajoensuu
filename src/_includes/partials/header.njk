@@ -1,0 +1,27 @@
+<header class="site-header">
+  <nav class="navbar" aria-label="Päävalikko">
+    <a class="brand" href="/">{{ site.title }}</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Avaa valikko">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu" id="nav-menu">
+      <ul class="nav-list">
+        {%- for item in navigation.items %}
+        {%- if item.children and item.children.length %}
+        <li class="has-dropdown">
+          <button class="dropdown-toggle" type="button" aria-expanded="false">{{ item.text }}</button>
+          <ul class="dropdown">
+            {%- for child in item.children %}
+            <li><a href="{{ child.url }}"{% if child.url == page.url %} aria-current="page"{% endif %}{% if child.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ child.text }}</a></li>
+            {%- endfor %}
+          </ul>
+        </li>
+        {%- else %}
+        <li><a href="{{ item.url }}"{% if item.url == page.url %} aria-current="page"{% endif %}{% if item.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ item.text }}</a></li>
+        {%- endif %}
+        {%- endfor %}
+      </ul>
+      {% include "partials/social.njk" %}
+    </div>
+  </nav>
+</header>

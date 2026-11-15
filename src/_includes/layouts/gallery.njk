@@ -1,0 +1,24 @@
+---
+layout: layouts/base.njk
+---
+<section class="section">
+  <div class="container">
+    <h1 class="page-title title--{{ titleColor or 'light' }}">{{ heroTitle or title }}</h1>
+    {%- if content | trim %}<div class="prose">{{ content | safe }}</div>{% endif %}
+    {%- if images and images.length %}
+    <div class="carousel" aria-roledescription="karuselli" aria-label="Kuvagalleria">
+      <div class="carousel__track" tabindex="0">
+        {%- for img in images %}
+        <figure class="carousel__slide" aria-label="Kuva {{ loop.index }} / {{ images.length }}">
+          {% image img.src, img.alt, "(min-width: 1140px) 1108px, 100vw", [640, 1108, 1600] %}
+          {%- if img.caption %}<figcaption>{{ img.caption }}</figcaption>{% endif %}
+        </figure>
+        {%- endfor %}
+      </div>
+      <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Edellinen kuva">&#8249;</button>
+      <button class="carousel__btn carousel__btn--next" type="button" aria-label="Seuraava kuva">&#8250;</button>
+      <div class="carousel__dots"></div>
+    </div>
+    {%- endif %}
+  </div>
+</section>

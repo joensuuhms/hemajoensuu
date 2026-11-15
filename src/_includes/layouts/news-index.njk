@@ -1,0 +1,31 @@
+---
+layout: layouts/base.njk
+---
+<section class="section section--bg" style="{% bgimage heroImage %}">
+  <div class="container">
+    <h1 class="page-title title--{{ titleColor or 'light' }}">{{ heroTitle or title }}</h1>
+    {%- if content | trim %}<div class="prose">{{ content | safe }}</div>{% endif %}
+    <div class="cards">
+      {%- for post in collections.news | reverse %}
+      <article class="card">
+        {%- if post.data.cardImage %}
+        <a class="card__img" href="{{ post.url }}" tabindex="-1" aria-hidden="true">
+          {% image post.data.cardImage, "", "(min-width: 768px) 50vw, 100vw", [480, 960] %}
+        </a>
+        {%- endif %}
+        <div class="card__body">
+          <h2 class="card__title"><a href="{{ post.url }}">{{ post.data.title }}</a></h2>
+          <p class="card__meta">
+            {%- if post.data.author %}<strong>{{ post.data.author }}</strong> {% endif -%}
+            <time datetime="{{ post.date | isoDate }}">{{ post.date | fiDate }}</time>
+          </p>
+          {%- if post.data.summary %}<p>{{ post.data.summary }}</p>{% endif %}
+          <p class="card__more"><a href="{{ post.url }}">Lue lisää<span class="visually-hidden">: {{ post.data.title }}</span></a></p>
+        </div>
+      </article>
+      {%- else %}
+      <p>Ei uutisia tällä hetkellä.</p>
+      {%- endfor %}
+    </div>
+  </div>
+</section>

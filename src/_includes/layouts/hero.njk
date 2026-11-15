@@ -1,0 +1,27 @@
+---
+layout: layouts/base.njk
+---
+<section class="hero" style="{% bgimage heroImage %}">
+  {%- if overlay %}<div class="overlay" style="opacity: {{ overlay }}"></div>{% endif %}
+  <div class="container hero__inner">
+    <div class="hero__content{% if wide %} hero__content--wide{% endif %}">
+      <h1 class="page-title title--{{ titleColor or 'light' }}">{{ heroTitle or title }}</h1>
+      <div class="prose">
+        {{ content | safe }}
+      </div>
+      {%- if faq and faq.length %}
+      <div class="faq">
+        {%- for item in faq %}
+        <h2 class="faq__q">{{ item.question }}</h2>
+        <div class="faq__a prose">{{ item.answer | md | safe }}</div>
+        {%- endfor %}
+      </div>
+      {%- endif %}
+      {%- if button and button.text %}
+      <p class="actions">
+        <a class="btn btn--{{ button.style or 'accent' }}" href="{{ button.url }}"{% if button.url | isExternal %} target="_blank" rel="noopener"{% endif %}>{{ button.text }}</a>
+      </p>
+      {%- endif %}
+    </div>
+  </div>
+</section>

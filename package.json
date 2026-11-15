@@ -1,0 +1,20 @@
+{
+  "name": "hemajoensuu-web",
+  "private": true,
+  "type": "module",
+  "description": "Joensuun historiallisen miekkailun seura ry:n verkkosivut (Eleventy + Decap CMS)",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "cms": "decap-server"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.8",
+    "@11ty/eleventy-img": "7.1.1",
+    "decap-server": "3.11.6",
+    "markdown-it": "14.1.0"
+  }
+}

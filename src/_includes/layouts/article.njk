@@ -1,0 +1,24 @@
+---
+layout: layouts/base.njk
+---
+<article class="section{% if background %} section--bg{% endif %}"{% if background %} style="{% bgimage background %}"{% endif %}>
+  {%- if background %}<div class="overlay" style="opacity: 0.7"></div>{% endif %}
+  <div class="container article{% if image %} article--split{% endif %}">
+    {%- if image %}
+    <div class="article__image">
+      {% image image, imageAlt or "", "(min-width: 992px) 640px, 100vw", [640, 1000, 1400] %}
+    </div>
+    {%- endif %}
+    <div class="article__text">
+      <h1 class="article__title">{{ title }}</h1>
+      <p class="article__meta">
+        {%- if author %}{{ author }} · {% endif -%}
+        <time datetime="{{ page.date | isoDate }}">{{ page.date | fiDate }}</time>
+      </p>
+      <div class="prose">
+        {{ content | safe }}
+      </div>
+      <p class="back"><a href="/needtoknow.html">&larr; Takaisin ajankohtaisiin</a></p>
+    </div>
+  </div>
+</article>
