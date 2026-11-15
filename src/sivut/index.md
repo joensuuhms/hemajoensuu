@@ -6,10 +6,6 @@ heroImage: /uploads/ristonasetelma-tumma-1600x1200.jpeg
 titleColor: light
 overlay: 0.35
 button:
-  text: Tule kokeilemaan
-  url: /contact.html
-  style: accent
-button2:
   text: Lue lisää lajista
   url: /readmore.html
   style: outline
