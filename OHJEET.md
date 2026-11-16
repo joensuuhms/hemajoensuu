@@ -97,7 +97,7 @@ Sisällöstä tehdään varmuuskopio automaattisesti joka sunnuntaiyö. GitHub s
 
 ### Varmuuskopion tekeminen ja lataaminen
 
-1. Avaa sivuston repositorio GitHubissa: **github.com/joensuuhms/web**.
+1. Avaa sivuston repositorio GitHubissa: **github.com/joensuuhms/hemajoensuu**.
 2. Valitse **Actions** ja vasemmalta **Varmuuskopio**.
 3. Paina **Run workflow**, valitse *sisalto* tai *koko* ja paina vihreää **Run workflow** -painiketta.
 4. Odota noin minuutti ja avaa valmistunut ajo.
@@ -127,12 +127,12 @@ Jos varmuuskopiotiedosto on vioittunut tai muokattu, palautus pysähtyy virheese
 
 ## Ylläpitäjälle: muokkaajien lisääminen ja poistaminen
 
-Sivustoa voi muokata jokainen, jolla on kirjoitusoikeus GitHub-repositorioon `joensuuhms/web`. Oikeuksia voi muuttaa vain repositorion omistaja eli joensuuhms-tunnus.
+Sivustoa voi muokata jokainen, jolla on kirjoitusoikeus GitHub-repositorioon `joensuuhms/hemajoensuu`. Oikeuksia voi muuttaa vain repositorion omistaja eli joensuuhms-tunnus.
 
 ### Muokkaajan lisääminen
 
 1. Pyydä uutta muokkaajaa luomaan ilmainen tunnus osoitteessa **github.com** ja kertomaan sinulle käyttäjätunnuksensa.
-2. Kirjaudu GitHubiin joensuuhms-tunnuksella ja avaa **github.com/joensuuhms/web**.
+2. Kirjaudu GitHubiin joensuuhms-tunnuksella ja avaa **github.com/joensuuhms/hemajoensuu**.
 3. Valitse ylävalikosta **Settings** ja vasemmalta **Collaborators**. GitHub voi pyytää salasanan tai kaksivaiheisen tunnistautumisen uudelleen.
 4. Paina **Add people**, kirjoita käyttäjätunnus tai sähköpostiosoite ja valitse oikea henkilö listasta.
 5. Paina **Add … to this repository**. GitHub lähettää kutsun sähköpostitse.

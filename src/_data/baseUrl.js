@@ -3,4 +3,4 @@
 import yllapito from "./yllapito.json" with { type: "json" };
 
 const domain = String(yllapito.domain || "").trim();
-export default domain ? `https://${domain}` : "https://joensuuhms.github.io/web";
+export default domain ? `https://${domain}` : "https://joensuuhms.github.io/hemajoensuu";

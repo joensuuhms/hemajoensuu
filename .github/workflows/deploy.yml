@@ -2,7 +2,7 @@ name: Julkaise sivusto
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   # Hourly rebuild so news posts with a "publishAt" time go live on schedule.
   # GitHub pauses scheduled runs after 60 days without repo activity; re-enable in the Actions tab.
   schedule:

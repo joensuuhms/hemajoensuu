@@ -1,13 +1,13 @@
 # Decap CMS configuration – https://decapcms.org/docs/configuration-options/
 #
-# Kirjautuminen: GitHub-tunnus, jolla on kirjoitusoikeus repoon joensuuhms/web.
+# Kirjautuminen: GitHub-tunnus, jolla on kirjoitusoikeus repoon joensuuhms/hemajoensuu.
 # base_url osoittaa Cloudflare Workeriin, joka hoitaa GitHub-kirjautumisen
 # (ks. README.md, kohta "CMS-kirjautumisen käyttöönotto").
 
 backend:
   name: github
-  repo: joensuuhms/web
-  branch: master
+  repo: joensuuhms/hemajoensuu
+  branch: main
   base_url: https://VAIHDA-TAHAN-WORKERIN-OSOITE.workers.dev
   commit_messages:
     create: 'Lisätty {{collection}} "{{slug}}"'
@@ -377,4 +377,4 @@ collections:
         file: src/_data/yllapito.json
         description: "⚠ Sivuston oma osoite. Muuta vain, jos verkkotunnuksen DNS-asetukset on jo tehty – väärä arvo voi viedä sivuston pois näkyvistä."
         fields:
-          - { label: "Oma verkkotunnus", name: domain, widget: string, required: false, pattern: ["^([a-z0-9-]+\\.)+[a-z]{2,}$", "Pelkkä verkkotunnus ilman https:// ja kauttaviivoja, esim. hemajoensuu.fi"], hint: "Esim. hemajoensuu.fi. Tyhjä = sivusto on osoitteessa joensuuhms.github.io/web." }
+          - { label: "Oma verkkotunnus", name: domain, widget: string, required: false, pattern: ["^([a-z0-9-]+\\.)+[a-z]{2,}$", "Pelkkä verkkotunnus ilman https:// ja kauttaviivoja, esim. hemajoensuu.fi"], hint: "Esim. hemajoensuu.fi. Tyhjä = sivusto on osoitteessa joensuuhms.github.io/hemajoensuu." }

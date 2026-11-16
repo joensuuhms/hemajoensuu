@@ -92,44 +92,55 @@ npm run restore -- file.zip            # restore (then review with git diff and 
 
 ## Deployment
 
-Every push to `master` runs `.github/workflows/deploy.yml`, which builds the site and deploys it to GitHub Pages. The workflow also runs **every hour** (`cron: "7 * * * *"`) so scheduled posts go live on time.
+The site lives in the GitHub repo **`joensuuhms/hemajoensuu`** (default branch `main`). Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and deploys it to GitHub Pages. The workflow also runs **every hour** (`cron: "7 * * * *"`) so scheduled posts go live on time.
 
 **Note:** GitHub pauses scheduled workflows in repos with no activity for 60 days. If scheduled posts stop appearing, re-enable the workflow under **Actions → Julkaise sivusto**.
 
-One-time setup: **Repo → Settings → Pages → Build and deployment → Source: GitHub Actions.**
+### Launch: replacing the old Mobirise site (one time)
+
+Until launch, hemajoensuu.fi is served by the old Mobirise export on the `gh-pages` branch of `joensuuhms/hemajoensuu`, and the new code lives on the `dev` branch of the same repo. Pushing `dev` does not affect the live site.
+
+1. Put the new code on `main` without deleting the old history:
+   - In **Branches**, rename the old `main` to e.g. `vanha-main` (`gh-pages` also keeps the old Mobirise export).
+   - Push the new code: `git push origin dev:main`. The deploy run this starts may fail because Pages still uses `gh-pages`; that's expected, and the old site keeps working.
+2. In **Settings → Pages**, switch **Source** from "Deploy from a branch (gh-pages)" to **GitHub Actions**. The custom domain `hemajoensuu.fi` stays set; with Actions, GitHub uses this field (not a `CNAME` file).
+3. Run **Actions → Julkaise sivusto → Run workflow** (branch `main`). When it is green, check https://hemajoensuu.fi.
+4. Tick **Enforce HTTPS** in **Settings → Pages** if it isn't already.
+5. **Settings → Actions → General → Workflow permissions:** tick "Allow GitHub Actions to create and approve pull requests" (needed by the Palautus workflow).
+
+The old repo `joensuuhms/web` (an older copy of the Mobirise site at joensuuhms.github.io/web) is no longer needed; archive it under **Settings → Archive this repository**.
 
 ### Custom domain: hemajoensuu.fi
 
-The domain is set in `src/_data/site.json` (`"domain"`). The build generates the `CNAME` file from it, and the sitemap, canonical links and `site_url` in `src/admin/config.yml` all use it.
-
-DNS at the domain registrar ([GitHub docs](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)):
+The domain is set in `src/_data/yllapito.json` (CMS → Ylläpito → Verkkotunnus). The build generates the `CNAME` file from it, and the sitemap and canonical links use it. The DNS records already point to GitHub Pages:
 
 | Type | Name | Value |
 |---|---|---|
-| A | `@` | `185.199.108.153` |
-| A | `@` | `185.199.109.153` |
-| A | `@` | `185.199.110.153` |
-| A | `@` | `185.199.111.153` |
+| A | `@` | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` |
 | CNAME | `www` | `joensuuhms.github.io` |
 
-Then, under **Repo → Settings → Pages**, enter `hemajoensuu.fi` as the custom domain and tick **Enforce HTTPS** once the certificate is issued. With an Actions deployment, the Settings field is what GitHub actually uses; the generated `CNAME` file only keeps the repo self-documenting.
+A domain can be attached to only one GitHub Pages site at a time; it is currently attached to `joensuuhms/hemajoensuu`, which is where this code is deployed.
 
 ## CMS login setup (one time)
 
-GitHub Pages cannot do the OAuth handshake that the CMS needs, so a tiny free Cloudflare Worker does it.
+GitHub Pages cannot do the login handshake that the CMS needs, so a tiny free Cloudflare Worker does it ([sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth)).
 
-1. Deploy [sveltia-cms-auth](https://github.com/sveltia/sveltia-cms-auth) to Cloudflare Workers (free account; the README has a one-click deploy button). Note the worker URL, e.g. `https://sveltia-cms-auth.<you>.workers.dev`.
-2. On GitHub, under **Settings → Developer settings → OAuth Apps → New OAuth App**:
-   - Homepage URL: the site URL
-   - Authorization callback URL: `<worker URL>/callback`
-3. In the Cloudflare worker settings, add these variables:
-   - `GITHUB_CLIENT_ID`
-   - `GITHUB_CLIENT_SECRET` (as a secret)
-   - `ALLOWED_DOMAINS` = `hemajoensuu.fi, www.hemajoensuu.fi`
+1. **Cloudflare:** deploy the worker with the one-click link https://deploy.workers.cloudflare.com/?url=https://github.com/sveltia/sveltia-cms-auth and note its URL, e.g. `https://sveltia-cms-auth.<you>.workers.dev`.
+2. **GitHub App** (logged in as `joensuuhms`): https://github.com/settings/apps/new
+   - Homepage URL: `https://hemajoensuu.fi`; Callback URL: `<worker URL>/callback`
+   - ✅ Expire user authorization tokens; ☐ Request user authorization during installation; ☐ Device Flow; ☐ Webhook active
+   - Repository permissions: **Contents** read & write, **Pull requests** read & write (Metadata read-only is automatic)
+   - Create the app, copy the **Client ID**, generate a **client secret**, then **Install App** on the `joensuuhms/hemajoensuu` repository only.
+3. **Cloudflare worker → Settings → Variables and Secrets:**
+   - `GITHUB_CLIENT_ID` (text)
+   - `GITHUB_CLIENT_SECRET` (**secret**)
+   - `ALLOWED_DOMAINS` = `hemajoensuu.fi, www.hemajoensuu.fi, localhost`
 4. Put the worker URL in `base_url` in `src/admin/config.yml` and push.
+
+The worker is built for Sveltia CMS and uses the same login protocol as Decap; test the login once after setup. GitHub App logins expire after about 8 hours, after which editors log in again.
 
 ### Giving club members access
 
 Each editor needs a free GitHub account. Invite them under **Repo → Settings → Collaborators → Add people**. The repo is owned by a personal account (`joensuuhms`), so collaborators always get write access: there are no roles to pick. Step-by-step instructions in Finnish are in `OHJEET.md` ("Ylläpitäjälle").
 
-`publish_mode: editorial_workflow` is on, so their edits are saved as drafts (pull requests). They appear live only when someone moves them to *Ready* and clicks *Publish* in the CMS *Workflow* view. Branch protection on `master` can enforce that drafts get reviewed.
+`publish_mode: editorial_workflow` is on, so their edits are saved as drafts (pull requests). They appear live only when someone moves them to *Ready* and clicks *Publish* in the CMS *Workflow* view. Branch protection on `main` can enforce that drafts get reviewed.
