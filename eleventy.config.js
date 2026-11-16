@@ -11,6 +11,9 @@ const pathPrefix = (process.env.PATH_PREFIX || "/").replace(/\/?$/, "/");
 // html: false – raw HTML typed into the CMS (e.g. <script>) is shown as text, not executed.
 // markdown-it also refuses javascript:/vbscript:/data: links on its own.
 const md = markdownIt({ html: false, linkify: true, breaks: true });
+// Only addresses with a protocol (https://…, mailto:…) become links automatically, so plain
+// words such as "gmail.com" or an obfuscated "nimi(at)gmail.com" stay as text.
+md.linkify.set({ fuzzyLink: false, fuzzyEmail: false });
 
 // `npm start` (serve/watch) is a local preview: drafts and scheduled posts are shown there.
 const isPreview = ["serve", "watch"].includes(process.env.ELEVENTY_RUN_MODE);

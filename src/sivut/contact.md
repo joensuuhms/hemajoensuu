@@ -8,8 +8,12 @@ titleColor: accent
 ---
 Talvikaudella harjoittelemme maanantaisin ja torstaisin Mutalan koulun liikuntasalissa osoitteessa *Lastenkatu 4, 80100 Joensuu*.
 
-**Harjoitusajat:** *maanantaisin klo 20.00–21.30* ja *torstaisin klo 20.00–21.30*.
+**Harjoitusajat:**
 
-Kesäisin harjoitukset pidetään Joensuun laulurinteen takana olevalla nurmikentällä klo 19.00–21.00.
+- maanantaisin klo 20.00–21.30
+- torstaisin klo 19.00–20.30
+- sunnuntaisin sparrivuoro klo 13.00–14.00
 
-**Sähköposti:** [joensuuhms@gmail.com](mailto:joensuuhms@gmail.com)
+Kesäisin harjoitukset pidetään Joensuun laulurinteen takana olevalla nurmikentällä.
+
+**Sähköposti:** joensuuhms(at)gmail.com

@@ -12,7 +12,7 @@ button:
 infoBox:
   title: Harjoitukset
   text: |-
-    **Ma ja to klo 20.00–21.30**, Mutalan koulun liikuntasali (Lastenkatu 4, Joensuu)
+    **Ma klo 20.00–21.30 ja to klo 19.00–20.30**, Mutalan koulun liikuntasali (Lastenkatu 4, Joensuu). Lisäksi sunnuntaisin sparrivuoro klo 13.00–14.00.
 
     Kesällä harjoittelemme ulkona laulurinteen takana. Aloittelijat ovat tervetulleita: alkuun pääsee sisäliikuntavarusteilla.
 ---
