@@ -149,9 +149,9 @@ export default function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("md", (text) => (text ? md.render(String(text)) : ""));
-  // Render a Markdown file from the project root (used for the CMS help page from OHJEET.md).
+  // Render a Markdown file from the project root (used for the CMS help page from other/OHJEET.md).
   eleventyConfig.addFilter("mdFile", (file) => md.render(fs.readFileSync(file, "utf8")));
-  eleventyConfig.addWatchTarget("OHJEET.md");
+  eleventyConfig.addWatchTarget("other/OHJEET.md");
   eleventyConfig.addFilter("isExternal", (url) => /^https?:\/\//.test(url || ""));
   eleventyConfig.addFilter("safeUrl", safeUrl);
   eleventyConfig.addFilter("fiDate", (date) =>

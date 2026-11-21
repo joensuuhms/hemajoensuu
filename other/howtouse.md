@@ -24,7 +24,7 @@ Club members' editing guide (in Finnish): [OHJEET.md](OHJEET.md).
 | `src/admin/config.yml` | CMS collections and fields (`locale: fi`) |
 | `src/admin/locale-fi.js` | Finnish translation of Decap's interface (same keys as `decap-cms-locales` `en`; missing keys fall back to English). Check for new keys when upgrading Decap. |
 | `src/admin/cms.js`, `preview.css` | Registers the locale and preview templates (news, hero pages, gallery, section builder) using the site's own `style.css`, then calls `CMS.init()` (`CMS_MANUAL_INIT` is set in `index.html`). |
-| `src/admin-ohje.njk` | `/admin/ohje/`: the editor guide rendered from `OHJEET.md`, opened by the "?" button in the CMS |
+| `src/admin-ohje.njk` | `/admin/ohje/`: the editor guide rendered from `other/OHJEET.md`, opened by the "?" button in the CMS |
 | `legacy/` | The old Mobirise export, kept until cutover; not published |
 
 ## Local development
@@ -141,6 +141,6 @@ The worker is built for Sveltia CMS and uses the same login protocol as Decap; t
 
 ### Giving club members access
 
-Each editor needs a free GitHub account. Invite them under **Repo → Settings → Collaborators → Add people**. The repo is owned by a personal account (`joensuuhms`), so collaborators always get write access: there are no roles to pick. Step-by-step instructions in Finnish are in `OHJEET.md` ("Ylläpitäjälle").
+Each editor needs a free GitHub account. Invite them under **Repo → Settings → Collaborators → Add people**. The repo is owned by a personal account (`joensuuhms`), so collaborators always get write access: there are no roles to pick. Step-by-step instructions in Finnish are in `other/OHJEET.md` ("Ylläpitäjälle").
 
 `publish_mode: editorial_workflow` is on, so their edits are saved as drafts (pull requests). They appear live only when someone moves them to *Ready* and clicks *Publish* in the CMS *Workflow* view. Branch protection on `main` can enforce that drafts get reviewed.

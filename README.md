@@ -14,8 +14,8 @@ The site presents the club and the sport, training times and places, news and co
 
 ## Documentation
 
-- [howtouse.md](howtouse.md) – how the site is built, run locally, published, backed up and maintained
-- [OHJEET.md](OHJEET.md) – editing guide for club members (in Finnish)
+- [other/howtouse.md](other/howtouse.md) – how the site is built, run locally, published, backed up and maintained
+- [other/OHJEET.md](other/OHJEET.md) – editing guide for club members (in Finnish)
 
 ## Contact
 

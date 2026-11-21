@@ -2,7 +2,7 @@
 #
 # Kirjautuminen: GitHub-tunnus, jolla on kirjoitusoikeus repoon joensuuhms/hemajoensuu.
 # base_url osoittaa Cloudflare Workeriin, joka hoitaa GitHub-kirjautumisen
-# (ks. howtouse.md, kohta "CMS login setup").
+# (ks. other/howtouse.md, kohta "CMS login setup").
 
 backend:
   name: github
