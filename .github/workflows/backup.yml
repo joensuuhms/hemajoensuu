@@ -22,11 +22,11 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - run: npm ci
@@ -49,7 +49,7 @@ jobs:
             echo "Palauttaaksesi tämän varmuuskopion suoraan GitHubista: Actions → Palautus → Run workflow, ja anna ajon numeroksi **${{ github.run_id }}**."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.make.outputs.name }}
           path: backups/*.zip
