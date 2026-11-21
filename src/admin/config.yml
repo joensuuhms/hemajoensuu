@@ -8,7 +8,7 @@ backend:
   name: github
   repo: joensuuhms/hemajoensuu
   branch: main
-  base_url: https://VAIHDA-TAHAN-WORKERIN-OSOITE.workers.dev
+  base_url: https://sveltia-cms-auth.joensuuhms.workers.dev
   commit_messages:
     create: 'Lisätty {{collection}} "{{slug}}"'
     update: 'Päivitetty {{collection}} "{{slug}}"'
