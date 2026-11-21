@@ -143,7 +143,7 @@ Muokkaaja saa samalla oikeuden ajaa varmuuskopiointia ja palautusta GitHubin Act
 
 ### Julkaisuoikeus
 
-Muokkaajan tallennukset menevät ensin luonnoksiksi (**Tallenna → Valmis**). Kaikki odottavat muutokset näkyvät sisällönhallinnan **Julkaisujono**-näkymässä. Huomaa, että kaikilla muokkaajilla on teknisesti oikeus myös julkaista (**Julkaise**). Jos haluat, että vain ylläpitäjä julkaisee, sopikaa siitä yhdessä. Vaihtoehtoisesti kehittäjä voi ottaa käyttöön GitHubin haarasuojauksen (ks. README.md).
+Muokkaajan tallennukset menevät ensin luonnoksiksi (**Tallenna → Valmis**). Kaikki odottavat muutokset näkyvät sisällönhallinnan **Julkaisujono**-näkymässä. Huomaa, että kaikilla muokkaajilla on teknisesti oikeus myös julkaista (**Julkaise**). Jos haluat, että vain ylläpitäjä julkaisee, sopikaa siitä yhdessä. Vaihtoehtoisesti kehittäjä voi ottaa käyttöön GitHubin haarasuojauksen (ks. howtouse.md).
 
 ### Muokkaajan poistaminen
 
