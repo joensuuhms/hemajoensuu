@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import Image from "@11ty/eleventy-img";
 import markdownIt from "markdown-it";
@@ -35,6 +36,22 @@ function safeUrl(url) {
 }
 
 // Images may only come from the site's own uploads folder or from an https address.
+const gitDateCache = new Map();
+function gitLastModified(file) {
+  if (!file) return null;
+  if (!gitDateCache.has(file)) {
+    let date = null;
+    try {
+      const out = execFileSync("git", ["log", "-1", "--format=%cI", "--", file], { encoding: "utf8" }).trim();
+      if (out) date = new Date(out);
+    } catch {
+      // git not available or not a repository: fall back to the file date
+    }
+    gitDateCache.set(file, date);
+  }
+  return gitDateCache.get(file);
+}
+
 // "/uploads/foo.jpg" (as stored by the CMS) -> "src/uploads/foo.jpg"; anything else -> null.
 function sourcePath(src) {
   const value = String(src).trim();
@@ -158,6 +175,10 @@ export default function (eleventyConfig) {
     new Date(date).toLocaleDateString("fi-FI", { day: "numeric", month: "numeric", year: "numeric", timeZone: "UTC" })
   );
   eleventyConfig.addFilter("isoDate", (date) => new Date(date).toISOString().slice(0, 10));
+  // Date of the last git commit that changed a source file (used for <lastmod> in the sitemap).
+  // Falls back to the given date for files not yet committed. The deploy workflow checks out
+  // the full history (fetch-depth: 0) so this works on GitHub Actions too.
+  eleventyConfig.addFilter("gitLastModified", (inputPath, fallback) => gitLastModified(inputPath) || fallback);
   eleventyConfig.addFilter("isFuture", isFuture);
   eleventyConfig.addFilter("fiDateTime", (date) =>
     new Date(date).toLocaleString("fi-FI", {

@@ -24,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Full history: the sitemap uses each page's last git change date.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v7
         with:

@@ -7,7 +7,7 @@ eleventyExcludeFromCollections: true
 {%- for p in collections.all %}
   <url>
     <loc>{{ baseUrl }}{{ p.url }}</loc>
-    <lastmod>{{ p.date | isoDate }}</lastmod>
+    <lastmod>{{ p.inputPath | gitLastModified(p.date) | isoDate }}</lastmod>
   </url>
 {%- endfor %}
 </urlset>
