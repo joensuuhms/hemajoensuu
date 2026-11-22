@@ -11,8 +11,7 @@ button2:
 infoBox:
   title: Harjoitukset
   text: "**Ma klo 20.00–21.30 ja to klo 19.00–20.30**, Mutalan koulun liikuntasali
-    (Lastenkatu 4, Joensuu). Kesällä harjoitukset ulkona laulurinteen takana
-    olevalla nurmialueella."
+    (Lastenkatu 4, Joensuu). Kesällä harjoitukset ulkona laulurinteellä."
 heroImage: /uploads/ristonasetelma-tumma-1600x1200.jpeg
 overlay: 0.35
 titleColor: light
